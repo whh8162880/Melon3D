@@ -1,3 +1,4 @@
+///<reference path="../core/MiniDispatcher.ts" /> 
 module rf{
     export class Transform extends MiniDispatcher{
         name : string;

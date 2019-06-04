@@ -1,4 +1,4 @@
-///<reference path="../core/ClassUtils.ts" />
+///<reference path="./ClassUtils.ts" />
 module rf {
 
 	export type EventHandler = (event: EventX) => void;

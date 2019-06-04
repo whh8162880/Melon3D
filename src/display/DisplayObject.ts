@@ -1,3 +1,4 @@
+///<reference path="./Transform.ts" /> 
 module rf{
     export var ROOT : Stage3D;
 

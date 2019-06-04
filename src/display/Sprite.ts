@@ -1,3 +1,4 @@
+///<reference path="./DisplayObject.ts" /> 
 module rf{
     export class Sprite extends DisplayObject{
         

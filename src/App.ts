@@ -1,6 +1,6 @@
 
 
-
+///<reference path="./display/stage3D/Stage3D.ts" /> 
 
 module rf{
 

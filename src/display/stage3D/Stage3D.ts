@@ -1,3 +1,4 @@
+///<reference path="../Sprite.ts" /> 
 module rf{
     export class Stage3D extends Sprite{
         canvas: HTMLCanvasElement;
