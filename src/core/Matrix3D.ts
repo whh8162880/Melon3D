@@ -27,7 +27,7 @@ interface IMatrix3D extends IArrayBase {
     m3_transformVector(v: IVector3D | number[], result?: IVector3D | number[]):void;
     m3_transformVectors(vin: ArrayLike<number>, vout: Float32Array | number[]):void;
     m3_transformRotation(v: IVector3D | number[], result?: IVector3D | number[]):void;
-    m3_getMaxScaleOnAxis():void;
+    m3_getMaxScaleOnAxis():number;
     m3_toString(scale:number):void;
 }
 

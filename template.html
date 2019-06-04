@@ -46,19 +46,20 @@
             var requestAnimationFrame = window['requestAnimationFrame'] || window['webkitRequestAnimationFrame'] || window['mozRequestAnimationFrame'] || window['oRequestAnimationFrame'] || window['msRequestAnimationFrame'];
 
             function setup(){
-                var username = "demo";
-                var ip = "";
-                var params = {};
+                // var username = "demo";
+                // var ip = "";
+                // var params = {};
 
-                var obj = {ticket:username,ip:ip};
-                obj.canvas = document.getElementById("game");
-                obj.domain = document.domain;
-                obj.params = params;
-                obj.platform = 0; //web 0/微端 1/安卓 2/ios 3/
-                obj.time = (new Date().getTime() * 0.001) >> 0;
-                obj.md5 = rf.singleton(rf.MD5).hex_md5(username + "xianlingkey" + obj.time);
+                // var obj = {ticket:username,ip:ip};
+                // obj.canvas = document.getElementById("game");
+                // obj.domain = document.domain;
+                // obj.params = params;
+                // obj.platform = 0; //web 0/微端 1/安卓 2/ios 3/
+                // obj.time = (new Date().getTime() * 0.001) >> 0;
+                // obj.md5 = rf.singleton(rf.MD5).hex_md5(username + "xianlingkey" + obj.time);
 
-                rf.launchGame(obj);
+                new rf.App().init(document.getElementById("game"));
+
             }
         </script>
 
