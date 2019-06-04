@@ -10,3 +10,15 @@
     melon update
     tsc
 ```
+
+## Compiler
+
+```TypeScript
+
+    melon
+
+    result:
+        29个文件
+        成功生成index.html D:/workspace_ts/watermelon/root/bin-debug/index.html
+        测试地址: http://127.0.0.1/ts/watermelon/root/bin-debug/index.html
+```
