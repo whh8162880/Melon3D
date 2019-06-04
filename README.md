@@ -3,3 +3,10 @@
 ```TypeScript
     重新开始设计引擎
 ```
+
+## install
+
+```TypeScript
+    melon update
+    tsc
+```
