@@ -1,7 +1,7 @@
 ///<reference path="../core/MiniDispatcher.ts" /> 
-module rf{
-    export class Transform extends MiniDispatcher{
-        name : string;
+module rf {
+    export class Transform extends MiniDispatcher {
+        name: string;
 
         _x = 0;
         _y = 0;
@@ -22,25 +22,25 @@ module rf{
         rot: IVector3D;
         sca: IVector3D;
 
-        localMatrix:IMatrix3D;
-        sceneMatrix:IMatrix3D;
+        localMatrix: IMatrix3D;
+        sceneMatrix: IMatrix3D;
 
         status = 0;
 
-        parent:Transform;
-        stage:Transform;
+        parent: Transform;
+        stage: Transform;
 
         pivotZero = false;
         pivotPonumber: IVector3D;
 
 
-        childrens:Transform[];
+        childrens: Transform[];
 
-        constructor(){
+        constructor() {
             super();
             this.pos = newVector3D();
             this.rot = newVector3D();
-            this.sca = newVector3D(1,1,1);
+            this.sca = newVector3D(1, 1, 1);
 
             this.localMatrix = newMatrix3D();
             this.sceneMatrix = newMatrix3D();
@@ -57,10 +57,10 @@ module rf{
             //batcher相关的都和我无关
             this.status |= (value & ~DChange.batch);    //本层不需要batcher对象识别
             if (undefined != this.parent) {
-                if(value & DChange.ta){
+                if (value & DChange.ta) {
                     value |= DChange.ct;                //如果本层transform or alpha 改变了 那就得通知上层
                 }
-                if(value & DChange.area){
+                if (value & DChange.area) {
                     value |= DChange.ca;                //如果本层hitArea改变了 那就得通知上层
                 }
                 this.parent.setChange(/*给batcher用的*/value & DChange.batch, /*给顶层通知说下层有情况用的*/value & DChange.c_all, true);
@@ -109,16 +109,16 @@ module rf{
         }
 
 
-        get rotation():number{
+        get rotation(): number {
             return this._rotationZ * RADIANS_TO_DEGREES;
         }
-        
-        set rotation(value:number){
+
+        set rotation(value: number) {
             value %= 360; value *= DEGREES_TO_RADIANS;
             if (value == this._rotationZ) return;
             this._rotationZ = value; this.rot.z = value; this.setChange(DChange.trasnform);
         }
-        
+
 
         get x(): number { return this._x; }
         get y(): number { return this._y; }
@@ -142,7 +142,7 @@ module rf{
 
 
         setPos(x: number, y: number, z: number = 0, update = true) {
-            if(this._x == x && this._y == y && this._z == z) return;
+            if (this._x == x && this._y == y && this._z == z) return;
             this.pos.x = this._x = x;
             this.pos.y = this._y = y;
             this.pos.z = this._z = z;
@@ -151,11 +151,11 @@ module rf{
             }
         }
 
-        setEulers(value:IVector3D, update = true) {
+        setEulers(value: IVector3D, update = true) {
             this._rotationX = value.x * DEGREES_TO_RADIANS;
             this._rotationY = value.y * DEGREES_TO_RADIANS;
             this._rotationZ = value.z * DEGREES_TO_RADIANS;
-            if(update){
+            if (update) {
                 this.setChange(DChange.trasnform | DChange.vcdata);
             }
         }
@@ -165,8 +165,8 @@ module rf{
 		 * @param distance
 		 * 
 		 */
-        forwardPos(distance: number, target?:IVector3D): void {
-            const{pos}=this;
+        forwardPos(distance: number, target?: IVector3D): void {
+            const { pos } = this;
             this.localMatrix.m3_copyColumnTo(2, tempAxeX);
             tempAxeX.v3_normalize();
             if (undefined != target) {
@@ -258,11 +258,11 @@ module rf{
         }
 
         get scale(): number {
-            let{_scaleX,_scaleY,_scaleZ} = this;
+            let { _scaleX, _scaleY, _scaleZ } = this;
             if (_scaleX == _scaleY && _scaleX == _scaleZ) {
                 return _scaleX;
             }
-            return Math.min(_scaleX,_scaleY,_scaleZ);
+            return Math.min(_scaleX, _scaleY, _scaleZ);
         }
 
         setSca(sx: number, sy: number, sz: number, update: Boolean = true): void {
@@ -277,7 +277,7 @@ module rf{
 
 
         setPivotPonumber(x: number, y: number, z: number): void {
-            let{pivotPonumber}=this;
+            let { pivotPonumber } = this;
             if (undefined == pivotPonumber) { this.pivotPonumber = newVector3D() };
             pivotPonumber.x = x;
             pivotPonumber.y = y;
@@ -286,10 +286,10 @@ module rf{
         }
 
 
-        setTransform(matrix:ArrayLike<number>): void {
-            const{localMatrix,pos,rot,sca}=this;
+        setTransform(matrix: ArrayLike<number>): void {
+            const { localMatrix, pos, rot, sca } = this;
             localMatrix.set(matrix);
-            localMatrix.m3_decompose(pos,rot,sca,Orientation3D.EULER_ANGLES);
+            localMatrix.m3_decompose(pos, rot, sca, Orientation3D.EULER_ANGLES);
             this._x = pos.x;
             this._y = pos.y;
             this._z = pos.z;
@@ -307,7 +307,7 @@ module rf{
 
 
         //================================================================================================================================
-        get numChildren(){
+        get numChildren() {
             return this.childrens.length;
         }
 
@@ -319,48 +319,48 @@ module rf{
         }
 
 
-        addChild(child:Transform){
-            if(undefined == child || child == this) return;
+        addChild(child: Transform) {
+            if (undefined == child || child == this) return;
             let childrens = this.childrens;
             let i = childrens.indexOf(child);
-            if(i == -1){
-                if(child.parent) child.remove();
+            if (i == -1) {
+                if (child.parent) child.remove();
                 childrens.push(child);
                 child.parent = this;
                 // child.setChange(DChange.base | DChange.batch);
 
                 this.setChange(DChange.batch | DChange.base);
 
-                if(this.stage){
-                    if(!child.stage){
+                if (this.stage) {
+                    if (!child.stage) {
                         child.stage = this.stage;
                         child.addToStage();
                     }
                 }
-            }else{
-                childrens.splice(i,1);
+            } else {
+                childrens.splice(i, 1);
                 childrens.push(child);
             }
         }
-    
 
-        addChildAt(child:Transform,index:number){
-            if(undefined == child || child == this) return;
-            if(child.parent) child.remove();
 
-            if(index < 0 ){
-				index = 0;
-			}else if(index > this.childrens.length){
-				index = this.childrens.length;
+        addChildAt(child: Transform, index: number) {
+            if (undefined == child || child == this) return;
+            if (child.parent) child.remove();
+
+            if (index < 0) {
+                index = 0;
+            } else if (index > this.childrens.length) {
+                index = this.childrens.length;
             }
 
-            this.childrens.splice(index,0,child);
+            this.childrens.splice(index, 0, child);
 
             child.parent = this;
-            let{stage} = this;
+            let { stage } = this;
 
-            if(stage){
-                if(!child.stage){
+            if (stage) {
+                if (!child.stage) {
                     child.stage = stage;
                     child.addToStage();
                 }
@@ -370,63 +370,63 @@ module rf{
         }
 
 
-        getChildIndex(child:Transform):number{
-			return this.childrens.indexOf(child);
+        getChildIndex(child: Transform): number {
+            return this.childrens.indexOf(child);
         }
-        
-        removeChild(child:Transform){
-			
-			if(undefined == child){
-				return;
-			}
-			
-			var i:number = this.childrens.indexOf(child);
-			if(i==-1){
-				return;
-			}
-            this.childrens.splice(i,1);
-			child.stage = undefined;
+
+        removeChild(child: Transform) {
+
+            if (undefined == child) {
+                return;
+            }
+
+            var i: number = this.childrens.indexOf(child);
+            if (i == -1) {
+                return;
+            }
+            this.childrens.splice(i, 1);
+            child.stage = undefined;
             child.parent = undefined;
             this.setChange(DChange.batch);
-			child.removeFromStage();
-		}
+            child.removeFromStage();
+        }
 
 
-        removeAllChild(){
-			const{childrens} = this;
+        removeAllChild() {
+            const { childrens } = this;
             let len = childrens.length;
-            for(let i=0;i<len;i++){
+            for (let i = 0; i < len; i++) {
                 let child = childrens[i];
                 child.stage = undefined;
                 child.parent = undefined;
-				child.removeFromStage();
+                child.removeFromStage();
             }
 
-            if(len > 0){
+            if (len > 0) {
                 this.setChange(DChange.batch);
             }
-            
-			this.childrens.length = 0;
+
+            this.childrens.length = 0;
         }
-        
-        removeFromStage(){
-            const{childrens} = this;
+
+        removeFromStage() {
+            const { childrens } = this;
             let len = childrens.length;
-            for(let i=0;i<len;i++){
+            for (let i = 0; i < len; i++) {
                 let child = childrens[i];
                 child.stage = undefined
-				child.removeFromStage();
+                child.removeFromStage();
             }
-		}
-		
-		
-		addToStage(){
-            const{childrens,stage} = this;
+        }
+
+
+        addToStage() {
+            const { childrens, stage } = this;
             let len = childrens.length;
-            for(let i=0;i<len;i++){
+            for (let i = 0; i < len; i++) {
                 let child = childrens[i];
                 child.stage = stage;
-				child.addToStage();
+                child.addToStage();
             }
         }
 
@@ -436,16 +436,16 @@ module rf{
 		 * 
 		 */
         updateTransform() {
-            const{localMatrix,pivotZero}=this;
+            const { localMatrix, pivotZero } = this;
             if (pivotZero) {
-                const{pivotPonumber}=this;
-                let{0:x,1:y,2:z}=pivotPonumber;
+                const { pivotPonumber } = this;
+                let { 0: x, 1: y, 2: z } = pivotPonumber;
                 localMatrix.m3_identity();
-                localMatrix.m3_translation(-x,-y,-z);
+                localMatrix.m3_translation(-x, -y, -z);
                 localMatrix.m3_scale(this._scaleX, this._scaleY, this._scaleZ);
-                localMatrix.m3_translation(this._x+x, this._y+y, this._z + z);
+                localMatrix.m3_translation(this._x + x, this._y + y, this._z + z);
             } else {
-                localMatrix.m3_recompose(this.pos,this.rot,this.sca)
+                localMatrix.m3_recompose(this.pos, this.rot, this.sca)
             }
 
             this.status &= ~DChange.trasnform;
@@ -455,20 +455,20 @@ module rf{
 		 * 
 		 * 
 		 */
-        updateSceneTransform(updateStatus = 0,parentSceneTransform?:IMatrix3D) {
-            let{status,parent} = this;
-            if(status & DChange.trasnform){
+        updateSceneTransform(updateStatus = 0, parentSceneTransform?: IMatrix3D) {
+            let { status, parent } = this;
+            if (status & DChange.trasnform) {
                 this.updateTransform();
                 updateStatus |= DChange.trasnform;
             }
 
-            if(updateStatus & DChange.trasnform){
-                if(parentSceneTransform){
-                    this.sceneMatrix.m3_append(parentSceneTransform,false,this.localMatrix);
-                }else{
-                    if(parent){
-                        this.sceneMatrix.m3_append(parent.sceneMatrix,false,this.localMatrix);
-                    }else{
+            if (updateStatus & DChange.trasnform) {
+                if (parentSceneTransform) {
+                    this.sceneMatrix.m3_append(parentSceneTransform, false, this.localMatrix);
+                } else {
+                    if (parent) {
+                        this.sceneMatrix.m3_append(parent.sceneMatrix, false, this.localMatrix);
+                    } else {
                         this.sceneMatrix.set(this.localMatrix);
                     }
                 }
@@ -481,81 +481,81 @@ module rf{
 
 
 
-        lookat(target: IVector3D, upAxis:IVector3D=null){
-			let xAxis = tempAxeX;
-			let yAxis = tempAxeY;
+        lookat(target: IVector3D, upAxis: IVector3D = null) {
+            let xAxis = tempAxeX;
+            let yAxis = tempAxeY;
             let zAxis = tempAxeZ;
-            
-            const{localMatrix,_scaleX,_scaleY,_scaleZ,_x,_y,_z,rot}=this;
-            
-            if(undefined == upAxis){
+
+            const { localMatrix, _scaleX, _scaleY, _scaleZ, _x, _y, _z, rot } = this;
+
+            if (undefined == upAxis) {
                 upAxis = Y_AXIS;
             }
-			
-			
-			zAxis.x = target.x - _x;
-			zAxis.y = target.y - _y;
-			zAxis.z = target.z - _z;
-			zAxis.v3_normalize();
-			
-			xAxis.x = upAxis.y*zAxis.z - upAxis.z*zAxis.y;
-			xAxis.y = upAxis.z*zAxis.x - upAxis.x*zAxis.z;
-			xAxis.z = upAxis.x*zAxis.y - upAxis.y*zAxis.x;
-			xAxis.v3_normalize();
-			
-			if (xAxis.v3_length < .05) {
-				xAxis.x = upAxis.y;
-				xAxis.y = upAxis.x;
-				xAxis.z = 0;
-				xAxis.v3_normalize();
-			}
-			
-			yAxis.x = zAxis.y*xAxis.z - zAxis.z*xAxis.y;
-			yAxis.y = zAxis.z*xAxis.x - zAxis.x*xAxis.z;
-			yAxis.z = zAxis.x*xAxis.y - zAxis.y*xAxis.x;
-			
-			let raw = localMatrix;
-			
-			raw[0] = _scaleX*xAxis.x;
-			raw[1] = _scaleX*xAxis.y;
-			raw[2] = _scaleX*xAxis.z;
-			raw[3] = 0;
-			
-			raw[4] = _scaleY*yAxis.x;
-			raw[5] = _scaleY*yAxis.y;
-			raw[6] = _scaleY*yAxis.z;
-			raw[7] = 0;
-			
-			raw[8] = _scaleZ*zAxis.x;
-			raw[9] = _scaleZ*zAxis.y;
-			raw[10] = _scaleZ*zAxis.z;
-			raw[11] = 0;
-			
-			raw[12] = _x;
-			raw[13] = _y;
-			raw[14] = _z;
-			raw[15] = 1;
-            
-            localMatrix.m3_decompose(undefined,rot,undefined);
-			
-			// let v = transform.decompose();
+
+
+            zAxis.x = target.x - _x;
+            zAxis.y = target.y - _y;
+            zAxis.z = target.z - _z;
+            zAxis.v3_normalize();
+
+            xAxis.x = upAxis.y * zAxis.z - upAxis.z * zAxis.y;
+            xAxis.y = upAxis.z * zAxis.x - upAxis.x * zAxis.z;
+            xAxis.z = upAxis.x * zAxis.y - upAxis.y * zAxis.x;
+            xAxis.v3_normalize();
+
+            if (xAxis.v3_length < .05) {
+                xAxis.x = upAxis.y;
+                xAxis.y = upAxis.x;
+                xAxis.z = 0;
+                xAxis.v3_normalize();
+            }
+
+            yAxis.x = zAxis.y * xAxis.z - zAxis.z * xAxis.y;
+            yAxis.y = zAxis.z * xAxis.x - zAxis.x * xAxis.z;
+            yAxis.z = zAxis.x * xAxis.y - zAxis.y * xAxis.x;
+
+            let raw = localMatrix;
+
+            raw[0] = _scaleX * xAxis.x;
+            raw[1] = _scaleX * xAxis.y;
+            raw[2] = _scaleX * xAxis.z;
+            raw[3] = 0;
+
+            raw[4] = _scaleY * yAxis.x;
+            raw[5] = _scaleY * yAxis.y;
+            raw[6] = _scaleY * yAxis.z;
+            raw[7] = 0;
+
+            raw[8] = _scaleZ * zAxis.x;
+            raw[9] = _scaleZ * zAxis.y;
+            raw[10] = _scaleZ * zAxis.z;
+            raw[11] = 0;
+
+            raw[12] = _x;
+            raw[13] = _y;
+            raw[14] = _z;
+            raw[15] = 1;
+
+            localMatrix.m3_decompose(undefined, rot, undefined);
+
+            // let v = transform.decompose();
             // xAxis = v[1];
-            
-            
+
+
             this._rotationX = rot.x;
             this._rotationY = rot.y;
             this._rotationZ = rot.z;
 
 
             if (zAxis.z < 0) {
-				this._rotationY = rot.y = (Math.PI - rot.y);
-				this._rotationX = rot.x = rot.x - Math.PI;
-				this._rotationZ = rot.z = rot.z - Math.PI;
+                this._rotationY = rot.y = (Math.PI - rot.y);
+                this._rotationX = rot.x = rot.x - Math.PI;
+                this._rotationZ = rot.z = rot.z - Math.PI;
             }
-            
+
             // this._rotationZ = rot.z = 0;
-            
-			this.setChange(DChange.trasnform);
+
+            this.setChange(DChange.trasnform);
         }
 
 

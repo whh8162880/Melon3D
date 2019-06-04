@@ -1,4 +1,4 @@
-module rf{
+module rf {
 
 	export function inRange(a, min, max) {
 		return min <= a && a <= max;
@@ -7,7 +7,7 @@ module rf{
 	export function byte_div(n, d) {
 		return Math.floor(n / d);
 	}
-	
+
 
 	export function byte_Error(fatal, opt_code_point?): number {
 		if (fatal) {
@@ -17,7 +17,7 @@ module rf{
 	}
 
 
-	export function byte_inflate(data:Uint8Array){
+	export function byte_inflate(data: Uint8Array) {
 		return new Zlib.Inflate(data).decompress()
 	}
 
@@ -186,111 +186,111 @@ module rf{
 	}
 
 
-    export class Byte{
-        position:number;
-        length:number;
-		buf:DataView;
-		uint8:Uint8Array;
+	export class Byte {
+		position: number;
+		length: number;
+		buf: DataView;
+		uint8: Uint8Array;
 
-        constructor(buf?:ArrayBuffer){
-            this.setArrayBuffer(buf);
-        }
+		constructor(buf?: ArrayBuffer) {
+			this.setArrayBuffer(buf);
+		}
 
-        setArrayBuffer(buf:ArrayBuffer){
-            if(undefined == buf){
+		setArrayBuffer(buf: ArrayBuffer) {
+			if (undefined == buf) {
 				this.length = this.position = 0;
 				buf = new ArrayBuffer(0);
-            }else{
+			} else {
 				this.buf = new DataView(buf);
-                this.length = buf.byteLength;
-                this.position = 0;
+				this.length = buf.byteLength;
+				this.position = 0;
 			}
 			this.uint8 = new Uint8Array(buf);
-        }
-
-        outOfRange(){
-
-        }
-
-        readByte(){
-            const{position}=this;
-            if(position > this.length){ this.outOfRange();return};
-            let b = this.buf.getUint8(position); 
-            this.position ++;
-            return b;
 		}
-		
-		writeByte(v:number){
-			const{position}=this;;
+
+		outOfRange() {
+
+		}
+
+		readByte() {
+			const { position } = this;
+			if (position > this.length) { this.outOfRange(); return };
+			let b = this.buf.getUint8(position);
 			this.position++;
-			this.buf.setInt8(position,v)
+			return b;
+		}
+
+		writeByte(v: number) {
+			const { position } = this;;
+			this.position++;
+			this.buf.setInt8(position, v)
 		}
 
 
-		readUint16(littleEndian?:boolean){
-			const{position}=this;
-            if(position + 2 > this.length) { this.outOfRange(); return; }
-            let b = this.buf.getUint16(position,littleEndian); 
-            this.position = position + 2;
-            return b;
-		}
-
-		writeUint16(v:number,littleEndian?:boolean){
-			const{position}=this;
+		readUint16(littleEndian?: boolean) {
+			const { position } = this;
+			if (position + 2 > this.length) { this.outOfRange(); return; }
+			let b = this.buf.getUint16(position, littleEndian);
 			this.position = position + 2;
-			this.buf.setUint16(position,v,littleEndian);
+			return b;
+		}
+
+		writeUint16(v: number, littleEndian?: boolean) {
+			const { position } = this;
+			this.position = position + 2;
+			this.buf.setUint16(position, v, littleEndian);
 		}
 
 
-		writeInt(v:number){
-			const{position}=this;
+		writeInt(v: number) {
+			const { position } = this;
 			this.position = position + 4;
-			this.buf.setInt32(position,v)
+			this.buf.setInt32(position, v)
 		}
 
-        readUInt(){
-            const{position}=this;
-            if(position + 4 > this.length) { this.outOfRange(); return; }
-            let b = this.buf.getUint32(position); 
-            this.position = position + 4;
-            return b;
+		readUInt() {
+			const { position } = this;
+			if (position + 4 > this.length) { this.outOfRange(); return; }
+			let b = this.buf.getUint32(position);
+			this.position = position + 4;
+			return b;
 		}
-		
-		writeUInt(v:number){
-			const{position}=this;;
+
+		writeUInt(v: number) {
+			const { position } = this;;
 			this.position += 4;
-			this.buf.setUint32(position,v)
+			this.buf.setUint32(position, v)
 		}
 
-        readDouble(){
-            const{position}=this;
-            if(position + 8 > this.length) { this.outOfRange(); return; }
-            let b = this.buf.getFloat64(position); 
-            this.position = position + 8;
-            return b;
-        }
+		readDouble() {
+			const { position } = this;
+			if (position + 8 > this.length) { this.outOfRange(); return; }
+			let b = this.buf.getFloat64(position);
+			this.position = position + 8;
+			return b;
+		}
 
-        readFloat(){
-            const{position}=this;
-            if(position + 4 > this.length) { this.outOfRange(); return; }
-            let b = this.buf.getFloat32(position); 
-            this.position = position + 4;
-            return b;
-        }
+		readFloat() {
+			const { position } = this;
+			if (position + 4 > this.length) { this.outOfRange(); return; }
+			let b = this.buf.getFloat32(position);
+			this.position = position + 4;
+			return b;
+		}
 
-        readMultiByte(length:number, charSet:string="utf-8"):string  {
-			const{position,buf}=this;
-			let end =position + length 
-			
-			if(end > this.length) { this.outOfRange(); return; }
+		readMultiByte(length: number, charSet: string = "utf-8"): string {
+			const { position, buf } = this;
+			let end = position + length
+
+			if (end > this.length) { this.outOfRange(); return; }
 			this.position += length;
 
-			let str = byte_decodeUTF8(new Uint8Array(buf.buffer.slice(position,end)))
+			let str = byte_decodeUTF8(new Uint8Array(buf.buffer.slice(position, end)))
 
-            // let str = "";
-            // for (var i:number = 0; i < length;i++ ){
-            //     str += String.fromCharCode(buf.getUint8(position + i));
-            // }
+			// let str = "";
+			// for (var i:number = 0; i < length;i++ ){
+			//     str += String.fromCharCode(buf.getUint8(position + i));
+			// }
 
 			// try{
 			// 	var u8 = new Uint8Array(length);
@@ -304,87 +304,87 @@ module rf{
 			// 		str += String.fromCharCode(buf.getUint8(position + i));
 			// 	}
 			// }
-			
+
 			return str;
 		}
-        
-        readByteArray(length?:number):ArrayBuffer{
-			const{position}=this;
-			if(!length){
+
+		readByteArray(length?: number): ArrayBuffer {
+			const { position } = this;
+			if (!length) {
 				length = this.length - position;
 			}
-            let buf = this.buf.buffer.slice(position,position+length);
-            this.position += length;
-            return buf;
+			let buf = this.buf.buffer.slice(position, position + length);
+			this.position += length;
+			return buf;
 		}
-		
-		writeByteArray(byte:ArrayLike<number>){
-			const{position,uint8}=this;
-			uint8.set(byte,position);
-            this.position += byte.length;
-        }
-    }
+
+		writeByteArray(byte: ArrayLike<number>) {
+			const { position, uint8 } = this;
+			uint8.set(byte, position);
+			this.position += byte.length;
+		}
+	}
 
 
 
-    export const enum AMF3Define{
-        UNDEFINED = 0x00,
-        NULL = 0x01,
-        FALSE = 0x02,
-        TRUE = 0x03,
-        // These markers represent a following value.
-        INT = 0x04,
-        DOUBLE = 0x05,
-        STRING = 0x06,
-        XMLDOC = 0x07,
-        DATE = 0x08,
-        ARRAY = 0x09,
-        OBJECT = 0x0A,
-        XML = 0x0B,
-        BYTEARRAY = 0x0C,
-        INTVECTOR = 0x0D,
-        UINTVECTOR = 0x0E,
-        DOUBLEVECTOR = 0x0F,
-        OBJECTVECTOR = 0x10,
+	export const enum AMF3Define {
+		UNDEFINED = 0x00,
+		NULL = 0x01,
+		FALSE = 0x02,
+		TRUE = 0x03,
+		// These markers represent a following value.
+		INT = 0x04,
+		DOUBLE = 0x05,
+		STRING = 0x06,
+		XMLDOC = 0x07,
+		DATE = 0x08,
+		ARRAY = 0x09,
+		OBJECT = 0x0A,
+		XML = 0x0B,
+		BYTEARRAY = 0x0C,
+		INTVECTOR = 0x0D,
+		UINTVECTOR = 0x0E,
+		DOUBLEVECTOR = 0x0F,
+		OBJECTVECTOR = 0x10,
 		DICTIONARY = 0x11,
 		FLOAT = 0xFD
-    }
+	}
 
-    export class ClassDefine{
-        className:string;
-        members:string[];
-        isExternalizable:boolean;
-        isDynamic:boolean;
-        constructor(className:string,members:string[]){
+	export class ClassDefine {
+		className: string;
+		members: string[];
+		isExternalizable: boolean;
+		isDynamic: boolean;
+		constructor(className: string, members: string[]) {
 			this.className = className;
 			this.members = members;
-        }
-    }
-
-    export class AMF3Decode extends Byte{
-        flags = 0;
-        ref;
-        stringsTable = [];
-        objectsTable = [];
-        traitsTable = [];
-        clsNameMap = {};
-
-        MASK = 1 << 28;
-
-        constructor(buf?:ArrayBuffer){
-            super(buf);
 		}
-		
-		clear(){
-			let{stringsTable,objectsTable,traitsTable}=this;
+	}
+
+	export class AMF3Decode extends Byte {
+		flags = 0;
+		ref;
+		stringsTable = [];
+		objectsTable = [];
+		traitsTable = [];
+		clsNameMap = {};
+
+		MASK = 1 << 28;
+
+		constructor(buf?: ArrayBuffer) {
+			super(buf);
+		}
+
+		clear() {
+			let { stringsTable, objectsTable, traitsTable } = this;
 			stringsTable.length = 0;
 			objectsTable.length = 0;
 			traitsTable.length = 0;
 			this.clsNameMap = {};
 		}
 
-        read29(unsign:boolean):number{
-			var v = 0,a = 0;
+		read29(unsign: boolean): number {
+			var v = 0, a = 0;
 			// v = this.readByte() & 0xff
 			// if (v >= 0x80)
 			// {
@@ -407,7 +407,7 @@ module rf{
 				v = (v & 0x7f) << 7;
 				if (a < 0x80) {//U29 2bytes 0x80-0xFF 0x00-0x7f
 					v = v | a;
-				}else {
+				} else {
 					v = (v | a & 0x7f) << 7;
 					a = this.readByte();
 					if (a < 0x80) { //U29 3bytes 0x80-0xFF 0x80-0xFF 0x00-0x7f
@@ -456,128 +456,126 @@ module rf{
 			// return -(v & this.MASK) | v;
 		}
 
-        // readInt(){
-        //     return this.read29(false);
+		// readInt(){
+		//     return this.read29(false);
 		// }
-		
-		readInt(){
-            const{position}=this;
-            if(position + 4 > this.length) { this.outOfRange(); return; }
-            let b = this.buf.getInt32(position); 
-            this.position = position + 4;
-            return b;
+
+		readInt() {
+			const { position } = this;
+			if (position + 4 > this.length) { this.outOfRange(); return; }
+			let b = this.buf.getInt32(position);
+			this.position = position + 4;
+			return b;
 		}
 
 
-        readString():string{
-            let handle = this.read29(true);
-            let inline = (handle & 1) != 0;
-            handle = handle >> 1;
-            if(inline)
-			{
-				if (0 == handle){
+		readString(): string {
+			let handle = this.read29(true);
+			let inline = (handle & 1) != 0;
+			handle = handle >> 1;
+			if (inline) {
+				if (0 == handle) {
 					return "";
 				}
 				var str = this.readMultiByte(handle);
 				this.stringsTable.push(str);
 				return str;
 			}
-			
+
 			return this.stringsTable[handle];
 
-        }
+		}
 
-        readDate(u29D:number):Date{
-            return new Date(this.readDouble());
-        }
+		readDate(u29D: number): Date {
+			return new Date(this.readDouble());
+		}
 
 
-        readObjectVector(length:number){
-            let fixed = this.read29(true);
-            let list = [];
-            
+		readObjectVector(length: number) {
+			let fixed = this.read29(true);
+			let list = [];
+
 			this.objectsTable.push(list);
-			
+
 			let index = -1;
-			while(++index<length){
-				list[index]=this.readObject();
+			while (++index < length) {
+				list[index] = this.readObject();
 			}
-			
+
 			return list;
-        }
+		}
 
 
-        readArray(length:number){
-            const{objectsTable}=this;
+		readArray(length: number) {
+			const { objectsTable } = this;
 			let instance = [];
-			
-            objectsTable.push(instance);
-            let key:string;
-			while(key = this.readString()){
-				instance[key]=this.readObject();
+
+			objectsTable.push(instance);
+			let key: string;
+			while (key = this.readString()) {
+				instance[key] = this.readObject();
 			}
 			var index = -1;
-			while(++index<length){
-				instance[index]=this.readObject();
+			while (++index < length) {
+				instance[index] = this.readObject();
 			}
-			
+
 			return instance;
-        }
-        
-        readDictionary(length:number){
+		}
+
+		readDictionary(length: number) {
 			let weakKeys = this.readByte() != 0;
-			
-            var dic = {};
-            
+
+			var dic = {};
+
 			this.objectsTable.push(dic);
-			
+
 			var key;
 			var value;
-			for(var i:number=0;i<length;i++){
-				
+			for (var i: number = 0; i < length; i++) {
+
 				key = this.readObject();
 				value = this.readObject();
-				
-				dic[key]=value
+
+				dic[key] = value
 			}
-			
+
 			return dic;
 		}
 
-        readObject(){
+		readObject() {
 			var value;
-			var marker:number = this.readByte();
-			switch(marker)
-			{
+			var marker: number = this.readByte();
+			switch (marker) {
 				case AMF3Define.INT:
 					value = this.read29(false);
-					if(value >= 0x10000000){
-						value = value - 0xFFFFFFFF-1;
+					if (value >= 0x10000000) {
+						value = value - 0xFFFFFFFF - 1;
 					}
 					break;
-				
+
 				case AMF3Define.DOUBLE:
 					value = this.readDouble();
 					break;
-				
+
 				case AMF3Define.FALSE:
 				case AMF3Define.TRUE:
-					value = (marker==AMF3Define.TRUE);
+					value = (marker == AMF3Define.TRUE);
 					break;
-				
+
 				case AMF3Define.NULL:
 					value = null;
 					break;
-				
+
 				case AMF3Define.UNDEFINED:
 					value = undefined;
 					break;
-				
-				
+
+
 				case AMF3Define.STRING:
 					value = this.readString();
 					break;
-				
+
 				case AMF3Define.ARRAY:
 				case AMF3Define.OBJECT:
 				case AMF3Define.DATE:
@@ -591,201 +589,194 @@ module rf{
 				case AMF3Define.DICTIONARY:
 					value = this.readReferencableObject(marker);
 					break;
-				
-				default :
-					throw Error("not implement:"+marker);
-					
+
+				default:
+					throw Error("not implement:" + marker);
+
 			}
-			
+
 			return value;
 		}
-		
 
-		readByteArray(length:number):ArrayBuffer{
-			const{objectsTable}=this;
+
+		readByteArray(length: number): ArrayBuffer {
+			const { objectsTable } = this;
 			let buf = super.readByteArray(length);
 			objectsTable.push(buf);
 			return buf;
-        }
+		}
 
-        
-        
-        private _readObject(handle:number):Object
-		{
-            const{traitsTable,objectsTable}=this;
 
-			let traits:string[];
-			let classDef:ClassDefine;
-			let className:string;
-			let len:number;
-			let i:number;
-			let inlineClassDef:Boolean = ((handle & 1) != 0);
+
+		private _readObject(handle: number): Object {
+			const { traitsTable, objectsTable } = this;
+
+			let traits: string[];
+			let classDef: ClassDefine;
+			let className: string;
+			let len: number;
+			let i: number;
+			let inlineClassDef: Boolean = ((handle & 1) != 0);
 			handle = handle >> 1;
-			if( inlineClassDef)
-			{
-				
-				className = this.readString();	
-				let isIExternalizable = (handle&1) !=0;
-				handle=handle>>1;
-				let isDynamic = (handle&1) !=0;
+			if (inlineClassDef) {
 
-				if(isDynamic == false){
+				className = this.readString();
+				let isIExternalizable = (handle & 1) != 0;
+				handle = handle >> 1;
+				let isDynamic = (handle & 1) != 0;
+
+				if (isDynamic == false) {
 					// throw new Error("not a Object");
 				}
 
-				len=handle>>1;
-				
-				traits= [];
-				for(i=0;i<len;i++){
-					traits[i]=this.readString();
-				}
-				classDef=new ClassDefine(className,traits);
-				classDef.isExternalizable=isIExternalizable;
-				classDef.isDynamic=isDynamic;
-				
-				traitsTable.push(classDef);
-			}else{
-				classDef = traitsTable[handle];
-				if(!classDef)
-				{
-					throw new Error("no trait found with refId: "+handle);
-				}
-				traits=classDef.members;
-				className=classDef.className;
-			}
-			
-            var instance;
-            instance = {};
-			
-			objectsTable.push(instance);
-			
-            
-            for(let key in traits){
-                key = traits[key];
-                instance[key]= this.readObject();
-            }
+				len = handle >> 1;
 
-			if(classDef.isDynamic){	
-                let key;
-				while(key = this.readString()){
+				traits = [];
+				for (i = 0; i < len; i++) {
+					traits[i] = this.readString();
+				}
+				classDef = new ClassDefine(className, traits);
+				classDef.isExternalizable = isIExternalizable;
+				classDef.isDynamic = isDynamic;
+
+				traitsTable.push(classDef);
+			} else {
+				classDef = traitsTable[handle];
+				if (!classDef) {
+					throw new Error("no trait found with refId: " + handle);
+				}
+				traits = classDef.members;
+				className = classDef.className;
+			}
+
+			var instance;
+			instance = {};
+
+			objectsTable.push(instance);
+
+
+			for (let key in traits) {
+				key = traits[key];
+				instance[key] = this.readObject();
+			}
+
+			if (classDef.isDynamic) {
+				let key;
+				while (key = this.readString()) {
 					instance[key] = this.readObject();
 				}
 			}
-			
+
 			return instance;
 		}
-        readReferencableObject(marker:number)
-		{
-            const{objectsTable}=this;
+		readReferencableObject(marker: number) {
+			const { objectsTable } = this;
 			let object;
 			let handle = this.read29(true);
-			let isIn = (handle&1) == 0;
-			handle=handle>>1;
-			
-			if( isIn)
-			{
+			let isIn = (handle & 1) == 0;
+			handle = handle >> 1;
+
+			if (isIn) {
 				object = objectsTable[handle];
 				return object;
 			}
-			else
-			{
-				switch(marker)
-				{
+			else {
+				switch (marker) {
 					case AMF3Define.ARRAY:
 						object = this.readArray(handle);
 						break;
-					
+
 					case AMF3Define.OBJECT:
 						object = this._readObject(handle);
 						break;
-					
+
 					case AMF3Define.DATE:
 						object = this.readDate(handle);
 						break;
-					
+
 					case AMF3Define.XML:
 						object = this.readMultiByte(handle);
 						break;
-					
+
 					case AMF3Define.XMLDOC:
 						object = this.readMultiByte(handle);
 						break;
 					case AMF3Define.BYTEARRAY:
 						object = this.readByteArray(handle);
 						break;
-					case AMF3Define.OBJECTVECTOR :
+					case AMF3Define.OBJECTVECTOR:
 					case AMF3Define.UINTVECTOR:
 					case AMF3Define.INTVECTOR:
 					case AMF3Define.DOUBLEVECTOR:
 						object = this.readObjectVector(handle);
 						break;
-					case AMF3Define.DICTIONARY :
+					case AMF3Define.DICTIONARY:
 						object = this.readDictionary(handle);
 						break;
-					
-					default :
-						throw Error("not implement:"+handle);
+
+					default:
+						throw Error("not implement:" + handle);
 				}
-				
+
 			}
 			return object;
-			
+
 		}
 	}
-	
-	export class AMF3Encode extends Byte{
+
+	export class AMF3Encode extends Byte {
 
 		stringsTable = [];
-        objectsTable = [];
+		objectsTable = [];
 		traitsTable = [];
-		
-		unit8:Uint8Array
 
-		constructor(buf?:ArrayBuffer){
-			super(buf || new ArrayBuffer(10240*1024));
+		unit8: Uint8Array
+
+		constructor(buf?: ArrayBuffer) {
+			super(buf || new ArrayBuffer(10240 * 1024));
 			this.unit8 = new Uint8Array(this.buf.buffer);
 		}
 
-		clear(){
-			let{stringsTable,objectsTable,traitsTable}=this;
+		clear() {
+			let { stringsTable, objectsTable, traitsTable } = this;
 			stringsTable.length = 0;
 			objectsTable.length = 0;
 			traitsTable.length = 0;
 			this.position = 0;
 		}
 
-		writeByte(value:number){
-			this.buf.setUint8(this.position,value);
-			this.position ++;
+		writeByte(value: number) {
+			this.buf.setUint8(this.position, value);
+			this.position++;
 		}
 
-		writeFloat(value:number){
-			this.buf.setFloat32(this.position,value);
+		writeFloat(value: number) {
+			this.buf.setFloat32(this.position, value);
 			this.position += 4;
 		}
 
-		writeDouble(value:number){
-			this.buf.setFloat64(this.position,value);
+		writeDouble(value: number) {
+			this.buf.setFloat64(this.position, value);
 			this.position += 8;
 		}
 
-		
 
-		writeString(str:string){
-			
-			let{stringsTable}=this;
+
+		writeString(str: string) {
+
+			let { stringsTable } = this;
 			let index = stringsTable.indexOf(str);
 
 			let handle
-			if(index == -1){
+			if (index == -1) {
 
 				let byte = byte_encodeUTF8(str);
 
 				let length = byte.length;
 				handle = length << 1;
 				handle |= 1;
-				this.write29(handle,true);
-				
+				this.write29(handle, true);
+
 				this.writeByteArray(byte);
 
 				// let{position,buf}=this;
@@ -795,17 +786,16 @@ module rf{
 				// this.position = position;
 
 				stringsTable.push(str);
-			}else{
+			} else {
 				handle = index << 1;
 				handle |= 0;
-				this.write29(handle,true);
+				this.write29(handle, true);
 			}
-        }
+		}
 
-		
 
-		write29 (v:number,unsign:boolean)
-		{
+
+		write29(v: number, unsign: boolean) {
 			// if(unsign == false){
 			// 	if (v < 0)
 			// 		v = (-v - 1)*2 + 1;
@@ -841,7 +831,7 @@ module rf{
 					this.writeByte(v & 0xFF);
 					break;
 			}
-		
+
 
 			// // 写入 7 位
 			// if (v < 0x80)
@@ -867,131 +857,131 @@ module rf{
 			// this.writeByte (v);
 		}
 
-		isRealNum(val){
+		isRealNum(val) {
 			// isNaN()函数 把空串 空格 以及NUll 按照0来处理 所以先去除
-			if(val === "" || val ==null){
+			if (val === "" || val == null) {
 				return false;
 			}
-			if(!isNaN(val)){
+			if (!isNaN(val)) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
-		}  
+		}
 
-		writeObject(o){
+		writeObject(o) {
 			let type = typeof o;
-			if(type === "string"){
+			if (type === "string") {
 				this.writeByte(AMF3Define.STRING);
 				this.writeString(String(o));
-			}else if(type === "boolean"){
-				this.writeByte(o == true ? AMF3Define.TRUE:AMF3Define.FALSE);
-			}else if('number' === type){
-				if((o >> 0) === o && o >= -0x10000000 && o < 0x10000000){
-					if(o<0){
-						o = 0xFFFFFFFF + (o+1);
+			} else if (type === "boolean") {
+				this.writeByte(o == true ? AMF3Define.TRUE : AMF3Define.FALSE);
+			} else if ('number' === type) {
+				if ((o >> 0) === o && o >= -0x10000000 && o < 0x10000000) {
+					if (o < 0) {
+						o = 0xFFFFFFFF + (o + 1);
 					}
 					this.writeByte(AMF3Define.INT);
-					this.write29(o,false);
-				}else{
+					this.write29(o, false);
+				} else {
 					this.writeByte(AMF3Define.DOUBLE);
 					this.writeDouble(o);
 				}
-			}else if(o instanceof Uint8Array 
-				|| (o instanceof Uint32Array) 
-				|| (o instanceof Uint16Array) 
-				|| (o instanceof Float32Array) 
+			} else if (o instanceof Uint8Array
+				|| (o instanceof Uint32Array)
+				|| (o instanceof Uint16Array)
+				|| (o instanceof Float32Array)
 				|| o instanceof Float64Array
-			){
+			) {
 				this.writeBytes(o.buffer)
-			}else if(o instanceof ArrayBuffer){
+			} else if (o instanceof ArrayBuffer) {
 				this.writeBytes(o)
-			}else if(o instanceof Array){
+			} else if (o instanceof Array) {
 				this.writeArray(o);
-			}else if(o instanceof Object){
+			} else if (o instanceof Object) {
 				this.writeByte(AMF3Define.OBJECT);
-				const{objectsTable}=this;
+				const { objectsTable } = this;
 				let index = objectsTable.indexOf(o);
 				let ins = 0;
-				if(index != -1){
-					this.write29(index << 1,true);
+				if (index != -1) {
+					this.write29(index << 1, true);
 					return;
 				}
 
 				objectsTable.push(o);
 
-				this.write29(0b1011,true); //isDynamic && isIExternalizable && inlineClassDef && 新对象
-				this.write29(0b1,true);	//class name
+				this.write29(0b1011, true); //isDynamic && isIExternalizable && inlineClassDef && 新对象
+				this.write29(0b1, true);	//class name
 
-				for(let key in o){
+				for (let key in o) {
 					this.writeString(key);
 					this.writeObject(o[key]);
 				}
 
 				this.writeByte(1) //结束
-			}else if(null === o){
+			} else if (null === o) {
 				this.writeByte(AMF3Define.NULL)
-			}else if(undefined === o){
+			} else if (undefined === o) {
 				this.writeByte(AMF3Define.UNDEFINED)
 			}
 		}
 
-		writeArray(arr){
+		writeArray(arr) {
 			this.writeByte(AMF3Define.ARRAY);
 
-			const{objectsTable}=this;
+			const { objectsTable } = this;
 			let index = objectsTable.indexOf(arr);
 			let ins = 0;
-			if(index != -1){
-				this.write29(index << 1,true);
+			if (index != -1) {
+				this.write29(index << 1, true);
 				return;
 			}
 
 			objectsTable.push(arr);
 			let len = arr.length;
-			this.write29( (len << 1) | 1,true);
+			this.write29((len << 1) | 1, true);
 			this.writeByte(1);
-			for(let i = 0;i<len;i++){
+			for (let i = 0; i < len; i++) {
 				this.writeObject(arr[i]);
 			}
 		}
-		
 
-		writeBytes(buffer:ArrayBuffer){
+
+		writeBytes(buffer: ArrayBuffer) {
 			this.writeByte(AMF3Define.BYTEARRAY);
-			const{objectsTable}=this;
+			const { objectsTable } = this;
 			let index = objectsTable.indexOf(buffer);
 			let ins = 0;
-			if(index != -1){
-				this.write29(index << 1,true);
+			if (index != -1) {
+				this.write29(index << 1, true);
 				return;
 			}
 
 			objectsTable.push(buffer);
 
 			let length = buffer.byteLength;
-			this.write29((length << 1) | 1,true);
+			this.write29((length << 1) | 1, true);
 
-			this.unit8.set(new Uint8Array(buffer),this.position);
+			this.unit8.set(new Uint8Array(buffer), this.position);
 			this.position += buffer.byteLength;
 		}
-		
 
-		toUint8Array(){
-			return new Uint8Array(this.buf.buffer).slice(0,this.position);
+
+		toUint8Array() {
+			return new Uint8Array(this.buf.buffer).slice(0, this.position);
 		}
 
-		toArrayBuffer(pos?:number){
-			if(!~~pos){
+		toArrayBuffer(pos?: number) {
+			if (!~~pos) {
 				pos = this.position;
 			}
-			return this.buf.buffer.slice(0,pos);
+			return this.buf.buffer.slice(0, pos);
 		}
 
 	}
 
 
-	export function amf_writeObject(obj:object){
+	export function amf_writeObject(obj: object) {
 		let amf = singleton(AMF3Encode);
 		amf.clear();
 		amf.writeObject(obj);
@@ -999,7 +989,7 @@ module rf{
 	}
 
 
-	export function amf_readObject(byte:ArrayBuffer | Uint8Array){
+	export function amf_readObject(byte: ArrayBuffer | Uint8Array) {
 		let amf = singleton(AMF3Decode);
 		// var inflate = new Zlib.Inflate(new Uint8Array(byte));
 		// var plain;
@@ -1009,7 +999,7 @@ module rf{
 		// 	plain = inflate.decompress();
 		// }
 		// amf.setArrayBuffer(plain.buffer);
-		if(byte instanceof Uint8Array){
+		if (byte instanceof Uint8Array) {
 			byte = byte.buffer;
 		}
 		amf.clear();

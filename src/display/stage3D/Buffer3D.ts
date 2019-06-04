@@ -29,7 +29,7 @@ module rf {
         logDepthFar = "logDepthFar",
         vc_diff = "vc_diff",
         vc_emissive = "vc_emissive",
-        vc_bones="bones"
+        vc_bones = "bones"
     }
 
     export class Buffer3D implements IRecyclable {
@@ -57,7 +57,7 @@ module rf {
         uniforms: Object = {};
         attribs: Object = {};
 
-        setting:IShaderSetting;
+        setting: IShaderSetting;
 
 
         constructor() {
@@ -91,7 +91,7 @@ module rf {
             }
 
             //加入资源管理
-            context3D.bufferLink.add(this,this,undefined);
+            context3D.bufferLink.add(this, this, undefined);
             this.readly = true;
             return true;
         }
@@ -162,11 +162,11 @@ module rf {
         recycle(): void {
             let g = gl;
             let att = context3D.attribarray;
-            let{buffer,attribarray} = this;
+            let { buffer, attribarray } = this;
 
             if (buffer) {
 
-                for(let t in attribarray){
+                for (let t in attribarray) {
                     attribarray[t] = false;
                     att[t] = false;
                     g.bindBuffer(g.ARRAY_BUFFER, buffer);
@@ -179,10 +179,10 @@ module rf {
             this.readly = false;
             this.preusetime = 0;
 
-            
-            
 
-            
+
+
+
 
             // this.numVertices = 0;
             // this.data32PerVertex = 0;
@@ -325,10 +325,10 @@ module rf {
         awaken(): boolean {
             if (true == this.readly) {
                 // if (DEBUG) {
-                    if (undefined == this.buffer) {
-                        ThrowError("indexBuffer readly is true but buffer is null");
-                        return false;
-                    }
+                if (undefined == this.buffer) {
+                    ThrowError("indexBuffer readly is true but buffer is null");
+                    return false;
+                }
                 // }
                 return true;
             }
@@ -384,17 +384,17 @@ module rf {
 
     export class Texture extends Buffer3D {
         key: number | string;
-        data:ITextureData;
+        data: ITextureData;
         texture: WebGLTexture;
         width: number = 0;
         height: number = 0;
         // uv:number[];
         pixels: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement | BitmapData;
-        floatData:Uint8Array;
+        floatData: Uint8Array;
         constructor() {
             super();
         }
-        
+
 
         awaken(): boolean {
 
@@ -412,13 +412,13 @@ module rf {
 
             g.bindTexture(g.TEXTURE_2D, tex);
 
-            
 
-            let{data:textureData}=this;
+
+            let { data: textureData } = this;
 
             // g.pixelStorei(g.UNPACK_FLIP_Y_WEBGL,true);
             //g.pixelStorei(g.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
-            
+
 
             g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, textureData.mag);
             g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, textureData.mix);
@@ -427,7 +427,7 @@ module rf {
             g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_T, pepeat);
 
 
-            
+
             // if(textureData.mipmap){
             //     g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, g.LINEAR);
             //     g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.LINEAR_MIPMAP_LINEAR);
@@ -469,14 +469,14 @@ module rf {
             // g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_S, g.CLAMP_TO_EDGE);   //U方向上设置
             // g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_T, g.CLAMP_TO_EDGE);   //v方向上设置
 
-            
+
             // }
             //如果我们的贴图长宽不满足2的幂条件。那么wrap_s 和 wrap_t 必须是 clap_to_edge
             //Wrapping Modes 
             //g.REPEAT                  limit:power of two   
             //g.MIRRORED_REPEAT         limit:power of two   
             //g.CLAMP_TO_EDGE
-           
+
 
             /**
                 ====format=====
@@ -507,27 +507,27 @@ module rf {
                 g.getExtension('WEBGL_depth_texture').UNSIGNED_INT_24_8_WEBGL
              */
 
-            let{width,height} = this;
+            let { width, height } = this;
 
-            if(data){
+            if (data) {
                 g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, g.RGBA, g.UNSIGNED_BYTE, data);
                 width = data.width;
                 height = data.height;
-            }else{
-                if(!this.floatData){
-                    this.floatData = new Uint8Array(width * height *4);
+            } else {
+                if (!this.floatData) {
+                    this.floatData = new Uint8Array(width * height * 4);
                 }
-                g.texImage2D(g.TEXTURE_2D,0,g.RGBA,width,height,0,g.RGBA,g.UNSIGNED_BYTE,this.floatData);
+                g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, width, height, 0, g.RGBA, g.UNSIGNED_BYTE, this.floatData);
                 // g.compressedTexImage2D()
             }
 
-            
 
-            
+
+
 
             //  createmipmap  limit:power of two
 
-            if(textureData.mipmap){
+            if (textureData.mipmap) {
                 g.generateMipmap(g.TEXTURE_2D);
             }
 
@@ -554,14 +554,14 @@ module rf {
 
             let uniforms = program.uniforms;
             let g = gl;
-            var index_tex:WebGLUniformLocation;
-            
+            var index_tex: WebGLUniformLocation;
+
 
             // if(this.data.url != "component"){
             //     console.log("active " + "TEXTURE" + index,this.pixels)
             // }
             index_tex = uniforms[variable];
-            
+
             if (undefined == index_tex) {
                 index_tex = g.getUniformLocation(program.program, variable);
                 uniforms[variable] = index_tex;
@@ -575,7 +575,7 @@ module rf {
                 // g.bindTexture(g.TEXTURE_2D, this.texture);
                 if (false == this.readly) {
                     this.awaken();
-                }else{
+                } else {
                     g.bindTexture(g.TEXTURE_2D, this.texture);
                 }
             }
@@ -587,26 +587,26 @@ module rf {
         }
 
 
-        status:LoadStates = LoadStates.WAIT;
+        status: LoadStates = LoadStates.WAIT;
 
-        load(url?:string){
-            if(undefined == url){
+        load(url?: string) {
+            if (undefined == url) {
                 url = this.data.url as string;
             }
-            if(LoadStates.WAIT == this.status){
+            if (LoadStates.WAIT == this.status) {
                 this.status = LoadStates.LOADING;
-                loadRes(RES_PERFIX,url,this.loadComplete,this,ResType.image);
+                loadRes(RES_PERFIX, url, this.loadComplete, this, ResType.image);
             }
         }
 
-        loadComplete(e:EventX){
-            if(e.type == EventT.COMPLETE){
+        loadComplete(e: EventX) {
+            if (e.type == EventT.COMPLETE) {
                 this.status = LoadStates.COMPLETE;
                 let image = e.data;
                 this.width = image.width;
                 this.height = image.height;
                 this.pixels = image;
-            }else{
+            } else {
                 this.status = LoadStates.FAILED;
             }
         }
@@ -628,38 +628,38 @@ module rf {
     }
 
 
-    export class RTTexture extends Texture{
-        frameBuffer:WebGLFramebuffer;
-        renderBuffer:WebGLRenderbuffer;
-        setting:IContext3DSetting = {} as IContext3DSetting;
-        cleanBit:number;
-        cleanColor:IVector3D;
+    export class RTTexture extends Texture {
+        frameBuffer: WebGLFramebuffer;
+        renderBuffer: WebGLRenderbuffer;
+        setting: IContext3DSetting = {} as IContext3DSetting;
+        cleanBit: number;
+        cleanColor: IVector3D;
 
-        awaken(){
+        awaken() {
             let b = super.awaken();
             let g = gl;
 
-            if(b){
-                let{frameBuffer,renderBuffer,texture,width,height} = this;
+            if (b) {
+                let { frameBuffer, renderBuffer, texture, width, height } = this;
 
-                if(!frameBuffer){
+                if (!frameBuffer) {
                     this.frameBuffer = frameBuffer = g.createFramebuffer();
                 }
 
-                g.bindFramebuffer(g.FRAMEBUFFER,frameBuffer);
+                g.bindFramebuffer(g.FRAMEBUFFER, frameBuffer);
 
-                if(!renderBuffer){
+                if (!renderBuffer) {
                     this.renderBuffer = renderBuffer = g.createRenderbuffer();
                 }
 
-                g.bindRenderbuffer(g.RENDERBUFFER,renderBuffer);
-                g.renderbufferStorage(g.RENDERBUFFER,g.DEPTH_COMPONENT16,width,height);
-                g.framebufferRenderbuffer(g.FRAMEBUFFER,g.DEPTH_ATTACHMENT,g.RENDERBUFFER,renderBuffer);
-                
-                g.framebufferTexture2D(g.FRAMEBUFFER,g.COLOR_ATTACHMENT0,g.TEXTURE_2D,texture,0);
+                g.bindRenderbuffer(g.RENDERBUFFER, renderBuffer);
+                g.renderbufferStorage(g.RENDERBUFFER, g.DEPTH_COMPONENT16, width, height);
+                g.framebufferRenderbuffer(g.FRAMEBUFFER, g.DEPTH_ATTACHMENT, g.RENDERBUFFER, renderBuffer);
 
-                g.bindRenderbuffer(g.RENDERBUFFER,undefined);
-                g.bindFramebuffer(g.FRAMEBUFFER,undefined);
+                g.framebufferTexture2D(g.FRAMEBUFFER, g.COLOR_ATTACHMENT0, g.TEXTURE_2D, texture, 0);
+
+                g.bindRenderbuffer(g.RENDERBUFFER, undefined);
+                g.bindFramebuffer(g.FRAMEBUFFER, undefined);
 
             }
 
@@ -668,16 +668,16 @@ module rf {
 
         recycle(): void {
             let g = gl;
-            let{frameBuffer,renderBuffer,texture} = this;
-            if(frameBuffer){
+            let { frameBuffer, renderBuffer, texture } = this;
+            if (frameBuffer) {
                 g.deleteFramebuffer(frameBuffer);
                 this.frameBuffer = undefined;
             }
-            if(renderBuffer){
+            if (renderBuffer) {
                 g.deleteRenderbuffer(renderBuffer);
                 this.renderBuffer = undefined;
             }
-            if(texture){
+            if (texture) {
                 g.deleteTexture(texture);
                 this.texture = undefined;
             }
@@ -686,27 +686,27 @@ module rf {
     }
 
 
-    export class CubeTexture extends Texture{
-        frameBuffer:WebGLFramebuffer;
-        renderBuffer:WebGLRenderbuffer;
-        setting:IContext3DSetting = {} as IContext3DSetting;
+    export class CubeTexture extends Texture {
+        frameBuffer: WebGLFramebuffer;
+        renderBuffer: WebGLRenderbuffer;
+        setting: IContext3DSetting = {} as IContext3DSetting;
 
-        files:string[] = ["nx", 'ny', 'nz', 'px', 'py', 'pz'];
-        
+        files: string[] = ["nx", 'ny', 'nz', 'px', 'py', 'pz'];
+
         //nx, ny, nz, px, py, pz
-        cubePixels: (ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement )[];
-        
+        cubePixels: (ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement)[];
+
         awaken(): boolean {
 
             let tex = this.texture;
             let g = gl;
-            
 
-            let data:HTMLCanvasElement[] = [];
-            
+
+            let data: HTMLCanvasElement[] = [];
+
             let [nx, ny, nz, px, py, pz] = this.cubePixels as any;
 
-            let{data:textureData}=this;
+            let { data: textureData } = this;
 
             if (undefined == tex) {
                 this.texture = tex = g.createTexture();
@@ -723,7 +723,7 @@ module rf {
             g.texParameteri(g.TEXTURE_CUBE_MAP, g.TEXTURE_WRAP_T, pepeat);
 
 
-            
+
             // if(data){
             g.texImage2D(g.TEXTURE_CUBE_MAP_POSITIVE_X, 0, g.RGB, g.RGB, g.UNSIGNED_BYTE, px);
             g.texImage2D(g.TEXTURE_CUBE_MAP_NEGATIVE_X, 0, g.RGB, g.RGB, g.UNSIGNED_BYTE, nx);
@@ -732,7 +732,7 @@ module rf {
             g.texImage2D(g.TEXTURE_CUBE_MAP_POSITIVE_Z, 0, g.RGB, g.RGB, g.UNSIGNED_BYTE, pz);
             g.texImage2D(g.TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, g.RGB, g.RGB, g.UNSIGNED_BYTE, nz);
 
-                // g.texImage2D(g.TEXTURE_CUBE_MAP, 0, g.RGBA, g.RGBA, g.UNSIGNED_BYTE, data);
+            // g.texImage2D(g.TEXTURE_CUBE_MAP, 0, g.RGBA, g.RGBA, g.UNSIGNED_BYTE, data);
             // }else{
             //     g.texImage2D(g.TEXTURE_CUBE_MAP_POSITIVE_X, 0,g.RGBA,this.width,this.height,0,gl.RGBA,gl.UNSIGNED_BYTE,undefined);
             //     g.texImage2D(g.TEXTURE_CUBE_MAP_NEGATIVE_X, 0,g.RGBA,this.width,this.height,0,gl.RGBA,gl.UNSIGNED_BYTE,undefined);
@@ -747,7 +747,7 @@ module rf {
 
             //  createmipmap  limit:power of two
 
-            if(textureData.mipmap){
+            if (textureData.mipmap) {
                 g.generateMipmap(g.TEXTURE_CUBE_MAP);
             }
 
@@ -766,7 +766,7 @@ module rf {
                 this.awaken();
             }
 
-            let index = context3D.texIndex++;            
+            let index = context3D.texIndex++;
 
             let uniforms = program.uniforms;
             let g = gl;
@@ -792,51 +792,50 @@ module rf {
         }
 
 
-        status:LoadStates = LoadStates.WAIT;
+        status: LoadStates = LoadStates.WAIT;
 
-        load(url?:string, type:string = '.jpg'){
-            if(undefined == url){
+        load(url?: string, type: string = '.jpg') {
+            if (undefined == url) {
                 url = this.data.url as string;
             }
-            if(url.charAt(url.length-1) != '/' ){
+            if (url.charAt(url.length - 1) != '/') {
                 url += '/';
             }
             this.cubePixels = []
-            if(LoadStates.WAIT == this.status){
+            if (LoadStates.WAIT == this.status) {
                 this.status = LoadStates.LOADING;
                 let files = this.files;
                 for (let i = 0; i < files.length; i++) {
                     const face = files[i];
-                    loadRes(RES_PERFIX,url + face + type, this.loadComplete,this,ResType.image);
+                    loadRes(RES_PERFIX, url + face + type, this.loadComplete, this, ResType.image);
                 }
             }
         }
 
-        loadComplete(e:EventX){
-            if(e.type == EventT.COMPLETE){
+        loadComplete(e: EventX) {
+            if (e.type == EventT.COMPLETE) {
                 let res = e.currentTarget as Loader;
                 let image = e.data;
                 this.width = image.width;
                 this.height = image.height;
 
                 let index = res.url.lastIndexOf('/');
-                let fname = res.url.slice(index+1);
+                let fname = res.url.slice(index + 1);
                 fname = fname.split('.')[0]
                 index = this.files.indexOf(fname)
 
                 this.cubePixels[index] = image;
                 let b = true;
-                for(let i:number = 0; i < 6; ++i)
-                {
+                for (let i: number = 0; i < 6; ++i) {
                     let pixels = this.cubePixels[i];
-                    if(pixels == undefined){
+                    if (pixels == undefined) {
                         b = false;
                     }
                 }
-                if(b){
+                if (b) {
                     this.status = LoadStates.COMPLETE;
                 }
-            }else{
+            } else {
                 this.status = LoadStates.FAILED;
             }
         }
@@ -848,9 +847,9 @@ module rf {
                 this.texture = undefined;
             }
             this.readly = false;
-            
+
         }
-        
+
     }
 
 
