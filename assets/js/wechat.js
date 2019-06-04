@@ -884,4 +884,3 @@ var wx;
     }
     wx.removeStorageSync = removeStorageSync;
 })(wx || (wx = {}));
-//# sourceMappingURL=wechat.js.map

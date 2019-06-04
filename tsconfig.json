@@ -22,10 +22,17 @@
     "src/**/*"
   ],
   "exclude": [
-    "think/**/*",
     "reference",
     ".d.ts",
     "Interface"
-  ],
-  "templete":"./template.html"
+  ]
+  ,
+  "templete":"./template.html",
+
+  "engine":{
+    "remote":"../engine/",
+    "files":[
+        "wechat"
+    ]
+  }
 }
