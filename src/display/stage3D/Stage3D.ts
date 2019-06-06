@@ -1,14 +1,15 @@
 import { singleton } from "../../core/ClassUtils.js";
 import { isMobile } from "../../core/Engine.js";
-import { MiniDispatcher } from "../../core/MiniDispatcher.js";
 import { Context3D } from "./Context3D.js";
+import { Sprite } from "../Sprite.js";
+import { Mouse } from "../../core/Mouse.js";
 
 
 export var context3D: Context3D;
 export var gl:WebGLRenderingContext;
 export var ROOT : Stage3D;
 
-export class Stage3D extends MiniDispatcher{
+export class Stage3D extends Sprite{
     canvas: HTMLCanvasElement;
 
     constructor(){
@@ -46,6 +47,7 @@ export class Stage3D extends MiniDispatcher{
             return false;
         }
         context3D = singleton(Context3D);
+        singleton(Mouse).init();
         // Capabilities.init();
         // mainKey.init();
         // KeyManagerV2.resetDefaultMainKey();

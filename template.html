@@ -39,11 +39,15 @@
         <!--auto-->
         <!--autoend-->
 
+        
+
 
         <script>
             /*config-start*/
             /*config-end*/
             var requestAnimationFrame = window['requestAnimationFrame'] || window['webkitRequestAnimationFrame'] || window['mozRequestAnimationFrame'] || window['oRequestAnimationFrame'] || window['msRequestAnimationFrame'];
+
+            var app;
 
             function setup(){
                 // var username = "demo";
@@ -59,6 +63,10 @@
                 // obj.md5 = rf.singleton(rf.MD5).hex_md5(username + "xianlingkey" + obj.time);
 
                 new App().init(document.getElementById("game"));
+
+                // if(app){
+                    // app.init(document.getElementById("game"));
+                // }
 
             }
         </script>
