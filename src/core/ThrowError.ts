@@ -17,8 +17,6 @@ export interface ThrowError {
     errorMsg?: string[];
 }
 
-export declare var Log: { (...msg): void }
-
 /**
 * 在内存中存储报错数据
 * @param msg

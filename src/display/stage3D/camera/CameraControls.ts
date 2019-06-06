@@ -1,10 +1,10 @@
 import { Camera } from "./Camera.js";
-import { newVector3D } from "../../../core/Matrix3D";
-import { Y_AXIS, TEMP_MATRIX3D, DEGREES_TO_RADIANS, X_AXIS, Z_AXIS } from "../../../core/Geom";
-import { ITweener, tweenStop, tweenTo } from "../../../core/Tween";
-import { EventX } from "../../../core/MiniDispatcher";
-import { defaultTimeMixer } from "../../../core/Engine";
-import { ROOT } from "../Stage3D";
+import { newVector3D } from "../../../core/Matrix3D.js";
+import { Y_AXIS, TEMP_MATRIX3D, DEGREES_TO_RADIANS, X_AXIS, Z_AXIS } from "../../../core/Geom.js";
+import { ITweener, tweenStop, tweenTo } from "../../../core/Tween.js";
+import { EventX } from "../../../core/MiniDispatcher.js";
+import { defaultTimeMixer } from "../../../core/Engine.js";
+import { ROOT } from "../Stage3D.js";
 
 module rf{
     export class TrackballControls{

@@ -1,8 +1,8 @@
-import { Sprite } from "../Sprite";
 import { Context3D } from "./Context3D.js";
-import { singleton } from "../../core/ClassUtils";
-import { Mouse } from "../../core/Mouse";
-import { isMobile } from "../../core/Engine";
+import { singleton } from "../../core/ClassUtils.js";
+import { Mouse } from "../../core/Mouse.js";
+import { isMobile } from "../../core/Engine.js";
+import { Sprite } from "../Sprite.js";
 
 export var context3D: Context3D;
 export var gl:WebGLRenderingContext;
@@ -10,6 +10,11 @@ export var ROOT : Stage3D;
 
 export class Stage3D extends Sprite{
     canvas: HTMLCanvasElement;
+
+    constructor(){
+        super();
+        ROOT = this;
+    }
 
     names = [  "webgl", "experimental-webgl","webkit-3d", "moz-webgl"];
     requestContext3D(canvas: HTMLCanvasElement): boolean {

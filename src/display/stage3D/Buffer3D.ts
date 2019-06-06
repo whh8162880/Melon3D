@@ -1,9 +1,9 @@
-import { BitmapData } from "../../core/BitmapData";
-import { RES_PERFIX } from "../../core/CONFIG";
-import { engineNow } from "../../core/Engine";
-import { Loader, loadRes, LoadStates, ResType } from "../../core/Http";
-import { EventX } from "../../core/MiniDispatcher";
-import { ThrowError } from "../../core/ThrowError";
+import { BitmapData } from "../../core/BitmapData.js";
+import { RES_PERFIX } from "../../core/CONFIG.js";
+import { engineNow } from "../../core/Engine.js";
+import { Loader, loadRes, LoadStates, ResType } from "../../core/Http.js";
+import { EventX } from "../../core/MiniDispatcher.js";
+import { ThrowError } from "../../core/ThrowError.js";
 import { IContext3DSetting } from "./Context3D.js";
 import { VertexInfo } from "./Geometry.js";
 import { gl, context3D } from "./Stage3D.js";

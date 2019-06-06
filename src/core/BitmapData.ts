@@ -1,5 +1,5 @@
-import { Log } from "./ThrowError.js";
 import { Rect, Size, Point2D } from "./Geom.js";
+import { ThrowError } from "./ThrowError.js";
 
 export class BitmapData {
     private _rect: { x: number; y: number; width: number; height: number };
@@ -14,7 +14,7 @@ export class BitmapData {
                 con.textAlign = "left";
                 con.textBaseline = "middle";//"hanging" "top" "middle"
             }else{
-                Log("create 2dcontext error! w:" + this.canvas.width + " h:"+this.canvas.height);
+                ThrowError("create 2dcontext error! w:" + this.canvas.width + " h:"+this.canvas.height);
             }
             
         }

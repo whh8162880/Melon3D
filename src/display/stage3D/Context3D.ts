@@ -1,13 +1,13 @@
-import { Link } from "../../core/Link";
+import { Link } from "../../core/Link.js";
 import { VertexInfo } from "./Geometry.js";
 import { VertexBuffer3D, IndexBuffer3D, Texture, RTTexture, CubeTexture, Program3D, Buffer3D } from "./Buffer3D.js";
-import { recyclable, Recyclable } from "../../core/ClassUtils";
-import { ThrowError } from "../../core/ThrowError";
-import { BitmapData } from "../../core/BitmapData";
-import { engineNow } from "../../core/Engine";
-import { Size, TEMP_VECTOR3D, size_intersection } from "../../core/Geom";
-import { TEMP_RECT } from "../../core/CONFIG";
-import { newMatrix3D } from "../../core/Matrix3D";
+import { recyclable, Recyclable } from "../../core/ClassUtils.js";
+import { ThrowError } from "../../core/ThrowError.js";
+import { BitmapData } from "../../core/BitmapData.js";
+import { engineNow } from "../../core/Engine.js";
+import { Size, TEMP_VECTOR3D, size_intersection } from "../../core/Geom.js";
+import { TEMP_RECT } from "../../core/CONFIG.js";
+import { newMatrix3D } from "../../core/Matrix3D.js";
 import { gl } from "./Stage3D.js";
 
 
