@@ -1,4 +1,4 @@
-import { Camera } from "./Camera";
+import { Camera } from "./Camera.js";
 import { newVector3D } from "../../../core/Matrix3D";
 import { Y_AXIS, TEMP_MATRIX3D, DEGREES_TO_RADIANS, X_AXIS, Z_AXIS } from "../../../core/Geom";
 import { ITweener, tweenStop, tweenTo } from "../../../core/Tween";

@@ -1,8 +1,8 @@
-import { EventHandler, MiniDispatcher, EventX, IEventDispatcherX } from "./MiniDispatcher";
-import { Link } from "./Link";
-import { FILE_ROOT } from "./CONFIG";
-import { engineNow } from "./Engine";
-import { byte_inflate, amf_readObject } from "./AMF3";
+import { EventHandler, MiniDispatcher, EventX, IEventDispatcherX } from "./MiniDispatcher.js";
+import { Link } from "./Link.js";
+import { FILE_ROOT } from "./CONFIG.js";
+import { engineNow } from "./Engine.js";
+import { byte_inflate, amf_readObject } from "./AMF3.js";
 
 export var HTTP_REPOSITORY:{[key:string]:Loader} = {};
 

@@ -1,6 +1,6 @@
 import { Link } from "../../core/Link";
-import { VertexInfo } from "./Geometry";
-import { VertexBuffer3D, IndexBuffer3D, Texture, RTTexture, CubeTexture, Program3D, Buffer3D } from "./Buffer3D";
+import { VertexInfo } from "./Geometry.js";
+import { VertexBuffer3D, IndexBuffer3D, Texture, RTTexture, CubeTexture, Program3D, Buffer3D } from "./Buffer3D.js";
 import { recyclable, Recyclable } from "../../core/ClassUtils";
 import { ThrowError } from "../../core/ThrowError";
 import { BitmapData } from "../../core/BitmapData";
@@ -8,7 +8,7 @@ import { engineNow } from "../../core/Engine";
 import { Size, TEMP_VECTOR3D, size_intersection } from "../../core/Geom";
 import { TEMP_RECT } from "../../core/CONFIG";
 import { newMatrix3D } from "../../core/Matrix3D";
-import { gl } from "./Stage3D";
+import { gl } from "./Stage3D.js";
 
 
 export var scissorRect:Size;

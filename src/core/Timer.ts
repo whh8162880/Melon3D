@@ -1,6 +1,6 @@
-import { MiniDispatcher, EventX } from "./MiniDispatcher";
-import { Link, LinkVO } from "./Link";
-import { Engine, engineNow, TickLink } from "./Engine";
+import { MiniDispatcher, EventX } from "./MiniDispatcher.js";
+import { Link, LinkVO } from "./Link.js";
+import { Engine, engineNow, TickLink } from "./Engine.js";
 
 export class Timer extends MiniDispatcher implements ITickable {
 	private _delay: number = 0;

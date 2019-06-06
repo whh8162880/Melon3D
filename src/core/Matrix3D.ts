@@ -1,4 +1,4 @@
-import { RADIANS_TO_DEGREES, DEGREES_TO_RADIANS } from "./Geom";
+import { RADIANS_TO_DEGREES, DEGREES_TO_RADIANS } from "./Geom.js";
 
 //Matrix3D算法相关
 const rf_v3_identity = [0, 0, 0, 1];

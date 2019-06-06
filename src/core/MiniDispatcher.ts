@@ -1,5 +1,5 @@
-import { Recyclable, recyclable } from "./ClassUtils";
-import { Link } from "./Link";
+import { Recyclable, recyclable } from "./ClassUtils.js";
+import { Link } from "./Link.js";
 
 export type EventHandler = (event: EventX) => void;
 

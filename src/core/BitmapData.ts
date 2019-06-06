@@ -1,5 +1,5 @@
-import { Log } from "./ThrowError";
-import { Rect, Size, Point2D } from "./Geom";
+import { Log } from "./ThrowError.js";
+import { Rect, Size, Point2D } from "./Geom.js";
 
 export class BitmapData {
     private _rect: { x: number; y: number; width: number; height: number };

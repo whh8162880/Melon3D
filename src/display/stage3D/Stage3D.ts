@@ -1,5 +1,5 @@
 import { Sprite } from "../Sprite";
-import { Context3D } from "./Context3D";
+import { Context3D } from "./Context3D.js";
 import { singleton } from "../../core/ClassUtils";
 import { Mouse } from "../../core/Mouse";
 import { isMobile } from "../../core/Engine";

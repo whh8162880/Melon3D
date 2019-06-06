@@ -1,6 +1,6 @@
-import { newVector3D, newMatrix3D, newMatrix } from "./Matrix3D";
+import { newVector3D, newMatrix3D, newMatrix } from "./Matrix3D.js";
 
-export declare type PosKey = "x" | "y";
+export declare type PosKey = "x" | "y.js";
 export declare type SizeKey = "width" | "height";
 
 /**

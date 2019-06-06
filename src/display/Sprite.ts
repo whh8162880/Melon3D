@@ -1,4 +1,4 @@
-import { DisplayObject } from "./DisplayObject";
+import { DisplayObject } from "./DisplayObject.js";
 
 export class Sprite extends DisplayObject{
     

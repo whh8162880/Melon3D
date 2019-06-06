@@ -4,9 +4,9 @@ import { engineNow } from "../../core/Engine";
 import { Loader, loadRes, LoadStates, ResType } from "../../core/Http";
 import { EventX } from "../../core/MiniDispatcher";
 import { ThrowError } from "../../core/ThrowError";
-import { IContext3DSetting } from "./Context3D";
-import { VertexInfo } from "./Geometry";
-import { gl, context3D } from "./Stage3D";
+import { IContext3DSetting } from "./Context3D.js";
+import { VertexInfo } from "./Geometry.js";
+import { gl, context3D } from "./Stage3D.js";
 
 export const enum VA {
     pos = "pos",

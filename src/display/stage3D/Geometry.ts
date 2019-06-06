@@ -1,9 +1,9 @@
-import { VertexBuffer3D, IndexBuffer3D, VA, Program3D, VC } from "./Buffer3D";
+import { VertexBuffer3D, IndexBuffer3D, VA, Program3D, VC } from "./Buffer3D.js";
 import { TEMP_VECTOR3D, TEMP_MATRIX3D, DEGREES_TO_RADIANS, Y_AXIS, X_AXIS } from "../../core/Geom";
 import { newVector3D, newMatrix3D } from "../../core/Matrix3D";
-import { Camera } from "./camera/Camera";
+import { Camera } from "./camera/Camera.js";
 import { DisplayObject } from "../DisplayObject";
-import { context3D } from "./Stage3D";
+import { context3D } from "./Stage3D.js";
 
 export let vertex_ui_variable:{ [key: string]: IVariable } = {
     //x,y,z,u,v,index,r,g,b,a

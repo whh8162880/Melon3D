@@ -1,6 +1,6 @@
-import { Link } from "./Link";
+import { Link } from "./Link.js";
 import { contextMatrix2D, contextInvMatrix, contextMatrix3D } from "../display/stage3D/Context3D";
-import { weixin, softKeyboard } from "./CONFIG";
+import { weixin, softKeyboard } from "./CONFIG.js";
 
 export var pixelFont:number = 1;
 export var pixelScale:number = 1;

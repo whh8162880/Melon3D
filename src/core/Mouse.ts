@@ -1,8 +1,8 @@
 import { DisplayObject } from "../display/DisplayObject";
-import { TEMP_VECTOR3D } from "./Geom";
-import { pixelRatio, engineNow } from "./Engine";
+import { TEMP_VECTOR3D } from "./Geom.js";
+import { pixelRatio, engineNow } from "./Engine.js";
 import { contextInvMatrix } from "../display/stage3D/Context3D";
-import { weixin } from "./CONFIG";
+import { weixin } from "./CONFIG.js";
 import { ROOT } from "../display/stage3D/Stage3D";
 
 export var nativeMouseX:number = 0;

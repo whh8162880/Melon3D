@@ -1,5 +1,5 @@
-import { Recyclable, recyclable } from "./ClassUtils";
-import { callLater } from "./Timer";
+import { Recyclable, recyclable } from "./ClassUtils.js";
+import { callLater } from "./Timer.js";
 
 export class LinkVO implements IRecyclable {
 

@@ -1,5 +1,5 @@
-import { EventX, MiniDispatcher } from "./MiniDispatcher";
-import { AMF3Decode, AMF3Encode } from "./AMF3";
+import { EventX, MiniDispatcher } from "./MiniDispatcher.js";
+import { AMF3Decode, AMF3Encode } from "./AMF3.js";
 
 
     export const enum SocketEventX{

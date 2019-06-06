@@ -1,4 +1,4 @@
-import { singleton } from "./ClassUtils";
+import { singleton } from "./ClassUtils.js";
 
 export function inRange(a, min, max) {
 	return min <= a && a <= max;

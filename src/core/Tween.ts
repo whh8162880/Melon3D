@@ -1,9 +1,9 @@
-import { Link } from "./Link";
-import { recyclable } from "./ClassUtils";
-import { LoadStates } from "./Http";
-import { MiniDispatcher } from "./MiniDispatcher";
-import { defaultTimeMixer, Engine } from "./Engine";
-import { DEGREES_TO_RADIANS } from "./Geom";
+import { Link } from "./Link.js";
+import { recyclable } from "./ClassUtils.js";
+import { LoadStates } from "./Http.js";
+import { MiniDispatcher } from "./MiniDispatcher.js";
+import { defaultTimeMixer, Engine } from "./Engine.js";
+import { DEGREES_TO_RADIANS } from "./Geom.js";
 
 //===========================================================================================
 // Tweener

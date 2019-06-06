@@ -1,5 +1,5 @@
-import { AMF3Encode, AMF3Decode } from "./AMF3";
-import { ThrowError } from "./ThrowError";
+import { AMF3Encode, AMF3Decode } from "./AMF3.js";
+import { ThrowError } from "./ThrowError.js";
 
     /**
      * 我其实不想实现它,奋笔疾书的感觉真好
