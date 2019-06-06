@@ -1,11 +1,5 @@
 import { Sprite } from "./display/Sprite.js";
 
-
-
-export function log(str:string){
-
-}
-
 export class App extends Sprite implements ITickable,IResizeable{
 
 

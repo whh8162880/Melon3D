@@ -36,44 +36,21 @@
 
         <script type="text/javascript" src="assets/js/wechat.js"></script>
 
-        <!--auto-->
+         <!--auto-->
         <!--autoend-->
 
-        
 
-
-        <script>
+        <script type="module">
+            import { App } from "./App.js"
             /*config-start*/
             /*config-end*/
             var requestAnimationFrame = window['requestAnimationFrame'] || window['webkitRequestAnimationFrame'] || window['mozRequestAnimationFrame'] || window['oRequestAnimationFrame'] || window['msRequestAnimationFrame'];
-
-            var app;
-
-            function setup(){
-                // var username = "demo";
-                // var ip = "";
-                // var params = {};
-
-                // var obj = {ticket:username,ip:ip};
-                // obj.canvas = document.getElementById("game");
-                // obj.domain = document.domain;
-                // obj.params = params;
-                // obj.platform = 0; //web 0/微端 1/安卓 2/ios 3/
-                // obj.time = (new Date().getTime() * 0.001) >> 0;
-                // obj.md5 = rf.singleton(rf.MD5).hex_md5(username + "xianlingkey" + obj.time);
-
-                new App().init(document.getElementById("game"));
-
-                // if(app){
-                    // app.init(document.getElementById("game"));
-                // }
-
-            }
+            new App().init(document.getElementById("game"));
         </script>
 
 
     </head>
-    <body onload="setup()">
+    <body>
         <canvas id="game" style="width: 100%;height: 100%;"></canvas>
     </body>
 </html>
