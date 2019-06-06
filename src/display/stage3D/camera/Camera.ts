@@ -1,7 +1,7 @@
 import { Transform } from "../../Transform.js";
 import { newMatrix3D } from "../../../core/Matrix3D.js";
-import { DEGREES_TO_RADIANS } from "../../../core/Geom.js";
 import { contextMatrix2D } from "../Context3D.js";
+import { DEGREES_TO_RADIANS } from "../../../core/CONFIG.js";
 
 export class Camera extends Transform{
     len:IMatrix3D;

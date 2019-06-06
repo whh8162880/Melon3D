@@ -1,9 +1,10 @@
 import { VertexBuffer3D, IndexBuffer3D, VA, Program3D, VC } from "./Buffer3D.js";
-import { TEMP_VECTOR3D, TEMP_MATRIX3D, DEGREES_TO_RADIANS, Y_AXIS, X_AXIS } from "../../core/Geom.js";
+import { TEMP_VECTOR3D, TEMP_MATRIX3D, Y_AXIS, X_AXIS } from "../../core/Geom.js";
 import { newVector3D, newMatrix3D } from "../../core/Matrix3D.js";
 import { Camera } from "./camera/Camera.js";
 import { DisplayObject } from "../DisplayObject.js";
 import { context3D } from "./Stage3D.js";
+import { DEGREES_TO_RADIANS } from "../../core/CONFIG.js";
 
 export let vertex_ui_variable:{ [key: string]: IVariable } = {
     //x,y,z,u,v,index,r,g,b,a

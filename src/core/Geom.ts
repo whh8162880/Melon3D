@@ -1,43 +1,5 @@
 import { newVector3D, newMatrix3D, newMatrix } from "./Matrix3D.js";
-
-export declare type PosKey = "x" | "y.js";
-export declare type SizeKey = "width" | "height";
-
-/**
- * 包含 x,y两个点的结构
- * 
- * @export
- * @interface Point2D
- */
-export interface Point2D {
-    x: number;
-    y: number;
-}
-/**
- * 包含 x,y,z 三个点的结构
- * 
- * @export
- * @interface Point3D
- * @extends {Point2D}
- */
-export interface Point3D extends Point2D {
-    z: number;
-}
-/**
- * 包含 x,y,z,w 四个点的结构
- * 
- * @export
- * @interface Point3DW
- * @extends {Point3D}
- */
-export interface Point3DW extends Point3D {
-    w: number;
-}
-
-export interface Size extends Point2D{
-    w:number;
-    h:number;
-}
+import { DEGREES_TO_RADIANS } from "./CONFIG.js";
 
 export function size_checkIn(l:number,r:number,t:number,b:number,dx:number,dy:number,scale:number){
     return dx > l * scale && dx < r * scale && dy > t * scale && dy < b * scale;
@@ -149,9 +111,6 @@ export class Rect extends Point {
 
 }
 
-
-export let RADIANS_TO_DEGREES: number = 180 / Math.PI;
-export let DEGREES_TO_RADIANS: number = Math.PI / 180;
 
 export let tempAxeX: IVector3D = newVector3D();
 export let tempAxeY: IVector3D = newVector3D();

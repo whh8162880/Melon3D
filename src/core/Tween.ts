@@ -3,8 +3,7 @@ import { recyclable } from "./ClassUtils.js";
 import { LoadStates } from "./Http.js";
 import { MiniDispatcher } from "./MiniDispatcher.js";
 import { defaultTimeMixer, Engine } from "./Engine.js";
-import { DEGREES_TO_RADIANS } from "./Geom.js";
-
+import { DEGREES_TO_RADIANS } from "./CONFIG.js";
 //===========================================================================================
 // Tweener
 //===========================================================================================

@@ -1,4 +1,5 @@
-import { Size } from "./Geom.js";
+export let RADIANS_TO_DEGREES: number = 180 / Math.PI;
+export let DEGREES_TO_RADIANS: number = Math.PI / 180;
 
 export function isPowerOfTwo(n: number): boolean {
     return (n !== 0) && ((n & (n - 1)) === 0);
@@ -17,13 +18,6 @@ export var weixin = false;
 export function setWeixin(value:boolean){
     weixin = value;
 }
-
-
-
-
-
-
-
 
 export var TEMP_RECT:Size = {} as Size;
 

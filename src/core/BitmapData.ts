@@ -1,4 +1,4 @@
-import { Rect, Size, Point2D } from "./Geom.js";
+import { Rect } from "./Geom.js";
 import { ThrowError } from "./ThrowError.js";
 
 export class BitmapData {

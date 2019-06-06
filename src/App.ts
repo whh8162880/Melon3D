@@ -1,4 +1,6 @@
 import { Sprite } from "./display/Sprite.js";
+import { singleton } from "./core/ClassUtils.js";
+import { Mouse } from "./core/Mouse.js";
 
 
 
@@ -13,6 +15,8 @@ export class App extends Sprite implements ITickable,IResizeable{
     init(canvas:HTMLCanvasElement){
 
         wx.no_maincanvas = canvas;
+
+        singleton(Mouse).init();
 
         // var b:boolean = ROOT.requestContext3D(canvas);
         // if(false == b){

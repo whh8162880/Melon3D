@@ -5,7 +5,7 @@ import { recyclable, Recyclable } from "../../core/ClassUtils.js";
 import { ThrowError } from "../../core/ThrowError.js";
 import { BitmapData } from "../../core/BitmapData.js";
 import { engineNow } from "../../core/Engine.js";
-import { Size, TEMP_VECTOR3D, size_intersection } from "../../core/Geom.js";
+import { TEMP_VECTOR3D, size_intersection } from "../../core/Geom.js";
 import { TEMP_RECT } from "../../core/CONFIG.js";
 import { newMatrix3D } from "../../core/Matrix3D.js";
 import { gl } from "./Stage3D.js";

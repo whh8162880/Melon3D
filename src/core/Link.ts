@@ -195,17 +195,24 @@ export class Link {
         this.removeLink(vo);
     }
 
+    protected clearing = false;
+
     removeLink(vo: Recyclable<LinkVO>): void {
         this.length--;
         vo.close = true;
         vo.data = null;
-        callLater.later(this.clean,this,500);
+        if(this.clearing == false){
+            setTimeout(this.clean.bind(this), 500);
+            this.clearing = true;
+        }
+        
     }
 
     clean(): void {
         let vo = this.first;
         var next;
         this.length = 0;
+        this.clearing = false;
         while (vo) {
             next = vo.next;
             if (true == vo.close) {

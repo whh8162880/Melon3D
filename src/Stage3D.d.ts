@@ -1,3 +1,43 @@
+
+declare type PosKey = "x" | "y.js";
+declare type SizeKey = "width" | "height";
+
+/**
+ * 包含 x,y两个点的结构
+ * 
+ * @export
+ * @interface Point2D
+ */
+declare interface Point2D {
+    x: number;
+    y: number;
+}
+/**
+ * 包含 x,y,z 三个点的结构
+ * 
+ * @export
+ * @interface Point3D
+ * @extends {Point2D}
+ */
+declare interface Point3D extends Point2D {
+    z: number;
+}
+/**
+ * 包含 x,y,z,w 四个点的结构
+ * 
+ * @export
+ * @interface Point3DW
+ * @extends {Point3D}
+ */
+declare interface Point3DW extends Point3D {
+    w: number;
+}
+
+declare interface Size extends Point2D{
+    w:number;
+    h:number;
+}
+
 declare const enum WebGLConst{
     ONE = 1,
     /**
