@@ -29,6 +29,8 @@
   ,
   "templete":"./template.html",
 
+  "main":"App.js",
+
   "engine":{
     "remote":"../engine/",
     "files":[
