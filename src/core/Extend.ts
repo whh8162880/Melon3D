@@ -175,20 +175,6 @@ Object.defineProperties(Object.prototype, makeDefDescriptors({
 // }
 
 
-interface Float32Array{
-    x:number;
-    y:number;
-    z:number;
-    w:number;
-    update(data32PerVertex: number, offset: number, v: number): void;
-    wPoint1(position: number, x: number, y?: number, z?: number, w?: number): void
-    wPoint2(position: number, x: number, y: number, z?: number, w?: number): void
-    wPoint3(position: number, x: number, y: number, z: number, w?: number): void
-    wPoint4(position: number, x: number, y: number, z: number, w: number): void
-    clone():Float32Array;
-}
-
-
 Object.defineProperties(Float32Array.prototype, makeDefDescriptors({
     x:{
         get(){

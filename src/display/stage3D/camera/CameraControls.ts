@@ -1,3 +1,11 @@
+import { Camera } from "./Camera";
+import { newVector3D } from "../../../core/Matrix3D";
+import { Y_AXIS, TEMP_MATRIX3D, DEGREES_TO_RADIANS, X_AXIS, Z_AXIS } from "../../../core/Geom";
+import { ITweener, tweenStop, tweenTo } from "../../../core/Tween";
+import { EventX } from "../../../core/MiniDispatcher";
+import { defaultTimeMixer } from "../../../core/Engine";
+import { ROOT } from "../Stage3D";
+
 module rf{
     export class TrackballControls{
         object:Camera;

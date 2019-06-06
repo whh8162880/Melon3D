@@ -1,6 +1,4 @@
-///<reference path="./Transform.ts" /> 
-module rf{
-    export var ROOT : Stage3D;
+import { Transform } from "./Transform";
 
     export class DisplayObject extends Transform{
 
@@ -38,4 +36,3 @@ module rf{
         }
         
     }
-}

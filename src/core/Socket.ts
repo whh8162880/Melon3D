@@ -1,6 +1,5 @@
-
-
-module rf{
+import { EventX, MiniDispatcher } from "./MiniDispatcher";
+import { AMF3Decode, AMF3Encode } from "./AMF3";
 
 
     export const enum SocketEventX{
@@ -217,4 +216,3 @@ module rf{
 			// return str;
 		}
     }
-}

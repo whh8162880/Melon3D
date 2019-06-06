@@ -1,6 +1,5 @@
-declare module rf{
 
-    const enum Time {
+    declare const enum Time {
 		/**
 		 * 一秒
 		 */
@@ -36,13 +35,13 @@ declare module rf{
     }
 
 
-    const enum TimerEventX{
+    declare const enum TimerEventX{
 		TIMER = 'timer',
 		TIMER_COMPLETE = 'timerComplete'
     }
     
     
-    interface ITimeMixer{
+    declare interface ITimeMixer{
 		now:number;
 		interval:number;
 		speed:number;
@@ -53,12 +52,10 @@ declare module rf{
     }
     
 
-    interface IResizeable {
+    declare interface IResizeable {
 		resize?(width: number, height: number);
     }
     
-	interface ITickable {
+	declare interface ITickable {
 		update?(now: number, interval: number);
 	}
-
-}

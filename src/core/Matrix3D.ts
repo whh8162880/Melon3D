@@ -1,35 +1,10 @@
+import { RADIANS_TO_DEGREES, DEGREES_TO_RADIANS } from "./Geom";
+
 //Matrix3D算法相关
 const rf_v3_identity = [0, 0, 0, 1];
 const rf_m3_identity = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 const rf_m2_identity = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 const rf_m3_temp = new Float32Array(16);
-
-interface IArrayBase {
-    clone(): IArrayBase;
-    buffer:ArrayBuffer;
-    set(array: ArrayLike<number> | IArrayBase, offset?: number): void;
-    readonly length: number;
-    [n: number]: number;
-}
-
-
-interface IMatrix3D extends IArrayBase {
-    m3_identity(from?:ArrayLike<number>):IMatrix3D;
-    m3_append(m3: ArrayLike<number> | IArrayBase, prepend?: boolean, from?: ArrayLike<number>):IMatrix3D;
-    m3_rotation(degrees: number, axis: IVector3D | number[], prepend?: boolean, from?: ArrayLike<number>):IMatrix3D;
-    m3_scale(x: number, y: number, z: number, prepend?: boolean, from?: ArrayLike<number>):IMatrix3D;
-    m3_translation(x: number, y: number, z: number, prepend?: boolean, from?: ArrayLike<number>):IMatrix3D;
-    m3_invert(from?: ArrayLike<number>,pos?:boolean):IMatrix3D;
-    m3_decompose(pos: IVector3D | number[], rot: IVector3D | number[], sca: IVector3D | number[], orientationStyle?: rf.Orientation3D):void;
-    m3_recompose(pos: IVector3D | number[], rot: IVector3D | number[], sca: IVector3D | number[], orientationStyle?: rf.Orientation3D):IMatrix3D;
-    m3_copyColumnFrom(column: number, vector3D: IVector3D | number[]):void;
-    m3_copyColumnTo(column: number, vector3D: IVector3D | number[]):void;
-    m3_transformVector(v: IVector3D | number[], result?: IVector3D | number[]):void;
-    m3_transformVectors(vin: ArrayLike<number>, vout: Float32Array | number[]):void;
-    m3_transformRotation(v: IVector3D | number[], result?: IVector3D | number[]):void;
-    m3_getMaxScaleOnAxis():number;
-    m3_toString(scale:number):void;
-}
 
 /*********************************************************
  * Matrix3D
@@ -209,9 +184,9 @@ Object.defineProperties(Float32Array.prototype, {
         QUATERNION = 2
      */
     m3_decompose: {
-        value: function (pos: Float32Array | number[], rot: Float32Array | number[], sca: Float32Array | number[], orientationStyle?: rf.Orientation3D) {
+        value: function (pos: Float32Array | number[], rot: Float32Array | number[], sca: Float32Array | number[], orientationStyle?: Orientation3D) {
             if (undefined == orientationStyle) {
-                orientationStyle = rf.Orientation3D.EULER_ANGLES;
+                orientationStyle = Orientation3D.EULER_ANGLES;
             }
 
             let [
@@ -251,7 +226,7 @@ Object.defineProperties(Float32Array.prototype, {
     
     
                 switch (orientationStyle) {
-                    case rf.Orientation3D.EULER_ANGLES: //EULER_ANGLES
+                    case Orientation3D.EULER_ANGLES: //EULER_ANGLES
                         rot[1] = Math.asin(-m2);
                         if (m2 != 1 && m2 != -1) {
                             rot[0] = atan2(m6, m10);
@@ -261,7 +236,7 @@ Object.defineProperties(Float32Array.prototype, {
                             rot[0] = atan2(-m4, m5);
                         }
                         break;
-                    case rf.Orientation3D.QUATERNION: //QUATERNION
+                    case Orientation3D.QUATERNION: //QUATERNION
                         const tr = m0 + m5 + m10;
                         if (tr > 0) {
                             let rw = sqrt(1 + tr) / 2;
@@ -289,7 +264,7 @@ Object.defineProperties(Float32Array.prototype, {
                             rot[3] = (m1 - m4) / (4 * rot[2]);
                         }
                         break;
-                    case rf.Orientation3D.AXIS_ANGLE://AXIS_ANGLE
+                    case Orientation3D.AXIS_ANGLE://AXIS_ANGLE
                         rot[3] = Math.acos((m0 + m5 + m10 - 1) / 2);
                         var len: number = Math.sqrt((m6 - m9) * (m6 - m9) + (m8 - m2) * (m8 - m2) + (m1 - m4) * (m1 - m4));
                         if(len == 0){
@@ -311,9 +286,9 @@ Object.defineProperties(Float32Array.prototype, {
     },
 
     m3_recompose: {
-        value: function (pos: Float32Array | number[], rot: Float32Array | number[], sca: Float32Array | number[], orientationStyle?: rf.Orientation3D) {
+        value: function (pos: Float32Array | number[], rot: Float32Array | number[], sca: Float32Array | number[], orientationStyle?: Orientation3D) {
             if (undefined == orientationStyle) {
-                orientationStyle = rf.Orientation3D.EULER_ANGLES;
+                orientationStyle = Orientation3D.EULER_ANGLES;
             }
 
             const { 0: scale_0_1_2, 1: scale_4_5_6, 2: scale_8_9_10 } = sca;
@@ -325,7 +300,7 @@ Object.defineProperties(Float32Array.prototype, {
             const { cos, sin } = Math;
 
             switch (orientationStyle) {
-                case rf.Orientation3D.EULER_ANGLES://Orientation3D.EULER_ANGLES:
+                case Orientation3D.EULER_ANGLES://Orientation3D.EULER_ANGLES:
                     {
                         var cx = cos(c1x);
                         var cy = cos(c1y);
@@ -357,7 +332,7 @@ Object.defineProperties(Float32Array.prototype, {
                         var y = c1y;
                         var z = c1z;
                         var w = c1w;
-                        if (orientationStyle == rf.Orientation3D.AXIS_ANGLE/*Orientation3D.AXIS_ANGLE*/) {
+                        if (orientationStyle == Orientation3D.AXIS_ANGLE/*Orientation3D.AXIS_ANGLE*/) {
                             const w_2 = w / 2;
                             const sinW_2 = sin(w_2);
                             x *= sinW_2;
@@ -409,7 +384,7 @@ Object.defineProperties(Float32Array.prototype, {
     },
 
     m3_transformVector: {
-        value: function (v: Float32Array | number[], result?: IVector3D | number[]) {
+        value: function (v: Float32Array | number[], result?: IArrayBase) {
             let { 0: x, 1: y, 2: z , 3 : w } = v;
             // w = 1;
             if (undefined == result) {
@@ -425,7 +400,7 @@ Object.defineProperties(Float32Array.prototype, {
     },
 
     m3_transformVectors: {
-        value: function (vin: ArrayLike<number>, vout: Float32Array | number[]) {
+        value: function (vin: ArrayLike<number>, vout: IArrayBase) {
             let i = 0;
             let v = [0, 0, 0];
             let v2 = [0, 0, 0];
@@ -444,7 +419,7 @@ Object.defineProperties(Float32Array.prototype, {
 
 
     m3_transformRotation: {
-        value: function (v: Float32Array | number[], result?: IVector3D | number[]) {
+        value: function (v: Float32Array | number[], result?: IArrayBase) {
             const { 0: x, 1: y, 2: z } = v;
             if (undefined == result) {
                 result = new Float32Array(rf_v3_identity);
@@ -469,7 +444,7 @@ Object.defineProperties(Float32Array.prototype, {
     }
 })
 
-interface IVector3D extends IArrayBase {
+export interface IVector3D extends IArrayBase {
     x: number;
     y: number;
     z: number;
@@ -560,7 +535,7 @@ Object.defineProperties(Float32Array.prototype, {
         }
     },
     v3_crossProduct: {
-        value: function (t: ArrayLike<number>, out?: IVector3D | number[]) {
+        value: function (t: ArrayLike<number>, out?: IArrayBase) {
             const { 0: x, 1: y, 2: z } = this;
             const { 0: ax, 1: ay, 2: az } = t;
 
@@ -596,24 +571,6 @@ Object.defineProperties(Float32Array.prototype, {
 
 })
 
-interface IMatrixComposeData{
-    x:number;
-    y:number;
-    scaleX:number;
-    scaleY:number;
-    rotaiton:number;
-}
-
-interface IMatrix extends IArrayBase {
-    m2_identity();
-    m2_append(m2: ArrayLike<number> | IArrayBase, prepend?: boolean, from?: ArrayLike<number>):IMatrix;
-    m2_scale(scalex:number,scaley:number);
-    m2_rotate(angle:number);
-    m2_transformVector(v: IVector3D | number[], result?: IVector3D | number[]);
-    m2_decompose(result?:IMatrixComposeData):IMatrixComposeData;
-    m2_recompose(value:IMatrixComposeData):IMatrix;
-    m2_clone():IMatrix;
-}
 
 Object.defineProperties(Float32Array.prototype, {
     m2_identity: {
@@ -651,7 +608,7 @@ Object.defineProperties(Float32Array.prototype, {
     },
 
     m2_transformVector: {
-        value: function (v: Float32Array | number[], result?: IVector3D | number[]) {
+        value: function (v: Float32Array | number[], result?: IArrayBase) {
             let { 0: x, 1: y} = v;
             // w = 1;
             if (undefined == result) {
@@ -716,7 +673,7 @@ Object.defineProperties(Float32Array.prototype, {
 
             let x = m6,y = m7;
 
-            let rotaiton = Math.acos(m0/sx) * rf.RADIANS_TO_DEGREES;
+            let rotaiton = Math.acos(m0/sx) * RADIANS_TO_DEGREES;
 
             if(!result){
                 result = {x:x,y:y,scaleX:sx,scaleY:sy,rotaiton:rotaiton} as IMatrixComposeData;
@@ -740,7 +697,7 @@ Object.defineProperties(Float32Array.prototype, {
             let sy = value.scaleY === undefined ? 1 :  value.scaleY;
             let rotaiton = value.rotaiton  === undefined ? 0 : value.rotaiton;
 
-            rotaiton *= rf.DEGREES_TO_RADIANS;
+            rotaiton *= DEGREES_TO_RADIANS;
 
             let cos = Math.cos(rotaiton),sin = Math.sin(rotaiton);
 
@@ -759,152 +716,140 @@ interface Float32Array extends IMatrix3D, IMatrix, IVector3D {
 
 }
 
-module rf {
-
-    export const enum Orientation3D {
-        EULER_ANGLES,// = "eulerAngles",
-        AXIS_ANGLE,// = "axisAngle",
-        QUATERNION,// = "quaternion",
-    }
-
-    const DEG_2_RAD = Math.PI / 180;
-
-    export function newMatrix3D(v?: ArrayLike<number> | ArrayBuffer) {
-        let out: Float32Array;
-        if (v instanceof ArrayBuffer) {
+export function newMatrix3D(v?: ArrayLike<number> | ArrayBuffer) {
+    let out: Float32Array;
+    if (v instanceof ArrayBuffer) {
+        out = new Float32Array(v);
+    } else {
+        if (undefined != v) {
             out = new Float32Array(v);
         } else {
-            if (undefined != v) {
-                out = new Float32Array(v);
-            } else {
-                out = new Float32Array(rf_m3_identity);
-            }
+            out = new Float32Array(rf_m3_identity);
         }
-        return out;
     }
+    return out;
+}
 
-    export function newMatrix(v?: ArrayLike<number> | ArrayBuffer) {
-        let out: Float32Array;
-        if (v instanceof ArrayBuffer) {
+export function newMatrix(v?: IArrayBase | ArrayBuffer) {
+    let out: Float32Array;
+    if (v instanceof ArrayBuffer) {
+        out = new Float32Array(v);
+    } else {
+        if (undefined != v) {
             out = new Float32Array(v);
         } else {
-            if (undefined != v) {
-                out = new Float32Array(v);
-            } else {
-                out = new Float32Array(rf_m2_identity);
-            }
+            out = new Float32Array(rf_m2_identity);
         }
-        return out;
+    }
+    return out;
+}
+
+export function newVector3D(x?: ArrayLike<number> | ArrayBuffer | number, y?: number, z?: number, w?: number) {
+    if (undefined == x) {
+        return new Float32Array(rf_v3_identity);
     }
 
-    export function newVector3D(x?: ArrayLike<number> | ArrayBuffer | number, y?: number, z?: number, w?: number) {
-        if (undefined == x) {
-            return new Float32Array(rf_v3_identity);
-        }
-
-        if (x instanceof ArrayBuffer) {
-            return new Float32Array(x);
-        }
-
-        if (undefined == y) {
-            y = 0;
-        }
-        if (undefined == z) {
-            z = 0;
-        }
-        if (undefined == w) { 
-            w = 0;
-        }
-        return new Float32Array([Number(x), y, z, w]);
+    if (x instanceof ArrayBuffer) {
+        return new Float32Array(x);
     }
 
+    if (undefined == y) {
+        y = 0;
+    }
+    if (undefined == z) {
+        z = 0;
+    }
+    if (undefined == w) { 
+        w = 0;
+    }
+    return new Float32Array([Number(x), y, z, w]);
+}
 
-    export function matrix2d_clearScale(matrix:IMatrix){
-    
+
+export function matrix2d_clearScale(matrix:IMatrix){
+
+}
+
+export function qua_lerp(qa: IVector3D, qb: IVector3D, t: number,out?:IVector3D) {
+    const { 0: qax, 1: qay, 2: qaz, 3: qaw } = qa;
+    const { 0: qbx, 1: qby, 2: qbz, 3: qbw } = qb;
+
+    if(!out){
+        out = newVector3D();
+    }
+    // shortest direction
+    if (qax * qbx + qay * qby + qaz * qbz + qaw * qbw < 0) {
+        out[0] = qax + t * (-qbx - qax);
+        out[1] = qay + t * (-qby - qay);
+        out[2] = qaz + t * (-qbz - qaz);
+        out[3] = qaw + t * (-qbw - qaw);
+    }else{
+        out[0] = qax + t * (qbx - qax);
+        out[1] = qay + t * (qby - qay);
+        out[2] = qaz + t * (qbz - qaz);
+        out[3] = qaw + t * (qbw - qaw)
+    }
+    return out;
+}
+
+
+export function qua_slerp(qa: IVector3D, qb: IVector3D, t: number,out?:IVector3D) {
+    let x:number,y:number,z:number,w:number;
+    let { 0: x1, 1: y1, 2: z1, 3: w1 } = qa;
+    let { 0: x2, 1: y2, 2: z2, 3: w2 } = qb;
+    let dot = x1 * x2 + y1 * y2 + z1 * z2 + w1 * w2;
+    if(dot < 0){
+        dot = -dot;
+        w2 = -w2;
+        x2 = -x2;
+        y2 = -y2;
+        z2 = -z2;
     }
 
-    export function qua_lerp(qa: IVector3D, qb: IVector3D, t: number,out?:IVector3D) {
-        const { 0: qax, 1: qay, 2: qaz, 3: qaw } = qa;
-        const { 0: qbx, 1: qby, 2: qbz, 3: qbw } = qb;
-
-        if(!out){
-            out = newVector3D();
-        }
-        // shortest direction
-        if (qax * qbx + qay * qby + qaz * qbz + qaw * qbw < 0) {
-            out[0] = qax + t * (-qbx - qax);
-            out[1] = qay + t * (-qby - qay);
-            out[2] = qaz + t * (-qbz - qaz);
-            out[3] = qaw + t * (-qbw - qaw);
-        }else{
-            out[0] = qax + t * (qbx - qax);
-            out[1] = qay + t * (qby - qay);
-            out[2] = qaz + t * (qbz - qaz);
-            out[3] = qaw + t * (qbw - qaw)
-        }
-        return out;
-    }
-
-
-    export function qua_slerp(qa: IVector3D, qb: IVector3D, t: number,out?:IVector3D) {
-        let x:number,y:number,z:number,w:number;
-        let { 0: x1, 1: y1, 2: z1, 3: w1 } = qa;
-        let { 0: x2, 1: y2, 2: z2, 3: w2 } = qb;
-        let dot = x1 * x2 + y1 * y2 + z1 * z2 + w1 * w2;
-        if(dot < 0){
-            dot = -dot;
-            w2 = -w2;
-            x2 = -x2;
-            y2 = -y2;
-            z2 = -z2;
-        }
-
-        if (dot < 0.95) {
-            let angle = Math.acos(dot);
-            let s = 1/Math.sin(angle);
-            let s1 = Math.sin(angle*(1 - t))*s;
-            let s2 = Math.sin(angle*t)*s;
-            w = w1*s1 + w2*s2;
-            x = x1*s1 + x2*s2;
-            y = y1*s1 + y2*s2;
-            z = z1*s1 + z2*s2;
-        }else {
-            w = w1 + t*(w2 - w1);
-            x = x1 + t*(x2 - x1);
-            y = y1 + t*(y2 - y1);
-            z = z1 + t*(z2 - z1);
-            let len = 1.0/Math.sqrt(w*w + x*x + y*y + z*z);
-            w *= len;
-            x *= len;
-            y *= len;
-            z *= len;
-        }
-
-
-
-        if(!out){
-            out = newVector3D();
-        }
-
-        out[0] = x;
-        out[1] = y;
-        out[2] = z;
-        out[3] = w;
-
-        return out;
+    if (dot < 0.95) {
+        let angle = Math.acos(dot);
+        let s = 1/Math.sin(angle);
+        let s1 = Math.sin(angle*(1 - t))*s;
+        let s2 = Math.sin(angle*t)*s;
+        w = w1*s1 + w2*s2;
+        x = x1*s1 + x2*s2;
+        y = y1*s1 + y2*s2;
+        z = z1*s1 + z2*s2;
+    }else {
+        w = w1 + t*(w2 - w1);
+        x = x1 + t*(x2 - x1);
+        y = y1 + t*(y2 - y1);
+        z = z1 + t*(z2 - z1);
+        let len = 1.0/Math.sqrt(w*w + x*x + y*y + z*z);
+        w *= len;
+        x *= len;
+        y *= len;
+        z *= len;
     }
 
 
-    export function pos_lerp(ap: IVector3D, bp: IVector3D, t: number,out?:IVector3D) {
-        const { 0: x, 1: y, 2: z } = ap;
-        if(!out){
-            out = newVector3D();
-        }
-        out[0] = x + t * (bp[0] - x);
-        out[1] = y + t * (bp[1] - y);
-        out[2] = z + t * (bp[2] - z);
-        return out;
+
+    if(!out){
+        out = newVector3D();
     }
 
+    out[0] = x;
+    out[1] = y;
+    out[2] = z;
+    out[3] = w;
+
+    return out;
+}
+
+
+export function pos_lerp(ap: IVector3D, bp: IVector3D, t: number,out?:IVector3D) {
+    const { 0: x, 1: y, 2: z } = ap;
+    if(!out){
+        out = newVector3D();
+    }
+    out[0] = x + t * (bp[0] - x);
+    out[1] = y + t * (bp[1] - y);
+    out[2] = z + t * (bp[2] - z);
+    return out;
 }
 
