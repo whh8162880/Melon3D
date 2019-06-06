@@ -1,6 +1,6 @@
-import { MiniDispatcher } from "../core/MiniDispatcher";
-import { newVector3D, newMatrix3D } from "../core/Matrix3D";
-import { RADIANS_TO_DEGREES, DEGREES_TO_RADIANS, tempAxeX, tempAxeY, tempAxeZ, Y_AXIS } from "../core/Geom";
+import { MiniDispatcher } from "../core/MiniDispatcher.js";
+import { newVector3D, newMatrix3D } from "../core/Matrix3D.js";
+import { RADIANS_TO_DEGREES, DEGREES_TO_RADIANS, tempAxeX, tempAxeY, tempAxeZ, Y_AXIS } from "../core/Geom.js";
 
 export class Transform extends MiniDispatcher {
     name: string;
