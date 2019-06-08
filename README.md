@@ -6,7 +6,7 @@
     2019.6.6 修改为ES6 Import 模式开发
 ```
 
-## Compiler
+## Compile
 
 ```TypeScript
 
@@ -18,6 +18,6 @@
 
 ```TypeScript
 
-    暂时只能内部可用。
+    git : https://github.com/whh8162880/Install.git
 
 ```
