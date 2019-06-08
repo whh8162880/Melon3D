@@ -414,6 +414,17 @@ var wx;
     function onAudioInterruptionEnd(callback) {
     }
     wx.onAudioInterruptionEnd = onAudioInterruptionEnd;
+    function arrayBufferToBase64(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+    wx.arrayBufferToBase64 = arrayBufferToBase64;
+    ;
 })(wx || (wx = {}));
 var wx;
 (function (wx) {

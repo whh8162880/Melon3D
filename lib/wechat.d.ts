@@ -34,9 +34,6 @@ declare module wx {
     function cookie_init(): void;
     function cookie_flush(): void;
 }
-declare class OffscreenCanvas extends HTMLCanvasElement {
-    constructor(width: number, height: number);
-}
 declare module wx {
     var no_systemInfo: ISystemInfo;
     var no_ismobile: boolean;
@@ -44,7 +41,7 @@ declare module wx {
     var no_softKeyboard: boolean;
     var no_stageWidth: number;
     var no_stageHeight: number;
-    function createCanvas(): HTMLCanvasElement;
+    function createCanvas(): HTMLCanvasElement | OffscreenCanvas;
     function createImage(): HTMLImageElement;
     function setPreferredFramesPerSecond(fps: number): void;
     interface ISystemInfo {
@@ -90,6 +87,7 @@ declare module wx {
     function onHide(callback: Function): void;
     function onAudioInterruptionBegin(callback: Function): void;
     function onAudioInterruptionEnd(callback: Function): void;
+    function arrayBufferToBase64(buffer: ArrayBuffer): string;
 }
 declare module wx {
     const enum HttpResponseType {

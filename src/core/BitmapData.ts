@@ -8,7 +8,7 @@ export class BitmapData {
     _context:CanvasRenderingContext2D;
     get context(){
         if(!this._context){
-            let con = this.canvas.getContext("2d");
+            let con = this.canvas.getContext("2d")  as CanvasRenderingContext2D;
             if(con){
                 this._context = con;
                 con.textAlign = "left";
@@ -26,7 +26,7 @@ export class BitmapData {
 
     constructor(width: number, height: number, transparent: boolean = true, fillColor: number = 0xFFFFFFFF) {
         this._transparent = transparent;
-        let canvas = wx.createCanvas();
+        let canvas = wx.createCanvas() as HTMLCanvasElement;
         canvas.width = width;
         canvas.height = height;
         this.canvas = canvas;
