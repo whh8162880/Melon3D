@@ -37,7 +37,7 @@ export class Transform extends MiniDispatcher {
     pivotPonumber: IVector3D;
 
 
-    childrens: Transform[];
+    childrens: Transform[] = [];
 
     constructor() {
         super();

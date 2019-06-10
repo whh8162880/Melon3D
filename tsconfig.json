@@ -29,7 +29,7 @@
   ,
   "templete":"./template.html",
 
-  "main":"App.js",
+  "main":"Main.js",
 
   "engine":{
     "remote":"../engine/",
