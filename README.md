@@ -7,18 +7,24 @@
     2018.6.10 脑图 http://naotu.baidu.com/file/c4dc63f146416d61af2a1fa6d8cf1887?token=d8a63568aa612328
 ```
 
+## Melon 编译器
+
+```TypeScript
+
+    编译项目 需要先下载Melon 编译器
+
+    git地址 : https://github.com/whh8162880/Install.git
+
+```
+
 ## Compile
 
 ```TypeScript
 
     tsc
 
-```
-
-## Melon 编译器
-
-```TypeScript
-
-    git : https://github.com/whh8162880/Install.git
+    melon
 
 ```
+
+

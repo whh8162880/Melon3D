@@ -3,7 +3,7 @@ declare const enum DChange {
     alpha = trasnform << 1,
     vertex = alpha << 1,
     vcdata = vertex << 1,
-    //底层transfrom改变
+    //底层transfrom改变 child transform = ct;
     ct = vcdata << 1,
     area = ct << 1,
     //底层htiArea改变
