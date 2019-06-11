@@ -11,7 +11,10 @@ export class Main extends App{
 
 
         root.addChild(child);
-
         this.addChild(root);
+
+        child.x = 100;
+
+        this.updateSceneTransform();
     }
 }

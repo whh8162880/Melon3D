@@ -1,7 +1,7 @@
-import { MiniDispatcher } from "../core/MiniDispatcher.js";
-import { newVector3D, newMatrix3D } from "../core/Matrix3D.js";
+import { DEGREES_TO_RADIANS, RADIANS_TO_DEGREES } from "../core/CONFIG.js";
 import { tempAxeX, tempAxeY, tempAxeZ, Y_AXIS } from "../core/Geom.js";
-import { RADIANS_TO_DEGREES, DEGREES_TO_RADIANS } from "../core/CONFIG.js";
+import { newMatrix3D, newVector3D } from "../core/Matrix3D.js";
+import { MiniDispatcher } from "../core/MiniDispatcher.js";
 
 export class Transform extends MiniDispatcher {
     name: string;
@@ -30,6 +30,53 @@ export class Transform extends MiniDispatcher {
 
     status = 0;
 
+    get status_debug(){
+        // trasnform = 0b1,
+        // alpha = trasnform << 1,
+        // vertex = alpha << 1,
+
+        // //底层transfrom改变 child transform = ct;
+        // area = vertex << 1,
+
+        // ct = area << 1,
+        // //底层hitArea改变
+        // ca = area << 1,
+
+        let{status} = this;
+
+        let str = "";
+
+        if(status & DChange.CHILD_TRANSFROM){
+            str += "childTransfrom"
+        }
+
+        if(status & DChange.CHILD_ALPHA){
+            str += "_childAlpha"
+        }
+
+        if(status & DChange.CHILD_HITAREA){
+            str += "_childHitArea"
+        }
+
+        if(status & DChange.HIT_AREA){
+            str += "_hitarea"
+        }
+
+        if(status & DChange.vertex){
+            str += "_vertex"
+        }
+
+        if(status & DChange.alpha){
+            str += "_alpha"
+        }
+
+        if(status & DChange.trasnform){
+            str += "_trasnform"
+        }
+
+        return str;
+    }
+
     parent: Transform;
     stage: Transform;
 
@@ -49,25 +96,24 @@ export class Transform extends MiniDispatcher {
         this.sceneMatrix = newMatrix3D();
     }
 
-    /**
-     * 逻辑规则
-     * 改变对象 transform  alpha   vertexData  vcData  hitArea
-     * 1.transform alpha 改变需要递归计算 并且上层是需要下层有改变的 引申出 ct 对象 childTranformORAlphaChange
-     * 2.vertexData vcData 是要让batcher知道数据改变了 本层不需要做任何处理
-     * 3.hitArea 改变 需要递归计算，引申出 ca对象 childHitAreaChange
-     */
-    setChange(value: number, p: number = 0, c: boolean = false) {
-        //batcher相关的都和我无关
-        this.status |= (value & ~DChange.batch);    //本层不需要batcher对象识别
-        if (undefined != this.parent) {
-            if (value & DChange.ta) {
-                value |= DChange.ct;                //如果本层transform or alpha 改变了 那就得通知上层
-            }
-            if (value & DChange.area) {
-                value |= DChange.ca;                //如果本层hitArea改变了 那就得通知上层
-            }
-            this.parent.setChange(/*给batcher用的*/value & DChange.batch, /*给顶层通知说下层有情况用的*/value & DChange.c_all, true);
+
+    setChange(value: number) {
+        this.status |= value;
+        let{parent} = this;
+        if(!parent) return;
+
+        let statues = parent.status;
+        if(value & DChange.trasnform){
+            statues |= DChange.CHILD_TRANSFROM;
         }
+
+        if(value & DChange.vertex){
+            statues |= DChange.vertex;
+        }
+
+        value = value &= DChange.CHILD_ALL;
+
+        parent.setChange(statues | value);
     }
 
 
@@ -84,7 +130,7 @@ export class Transform extends MiniDispatcher {
         if (this._scaleX == value) return;
         this._scaleX = value;
         this.sca.x = value;
-        this.setChange(DChange.trasnform | DChange.vcdata);
+        this.setChange(DChange.trasnform);
     }
     get scaleY(): number { return this._scaleY; }
     set scaleY(value: number) { this._scaleY = value; this.sca.y = value; this.setChange(DChange.trasnform); }
@@ -98,17 +144,17 @@ export class Transform extends MiniDispatcher {
     set rotationX(value: number) {
         value %= 360; value *= DEGREES_TO_RADIANS;
         if (value == this._rotationX) return;
-        this._rotationX = value; this.rot.x = value; this.setChange(DChange.trasnform | DChange.vcdata);
+        this._rotationX = value; this.rot.x = value; this.setChange(DChange.trasnform);
     }
     set rotationY(value: number) {
         value %= 360; value *= DEGREES_TO_RADIANS;
         if (value == this._rotationY) return;
-        this._rotationY = value; this.rot.y = value; this.setChange(DChange.trasnform | DChange.vcdata);
+        this._rotationY = value; this.rot.y = value; this.setChange(DChange.trasnform);
     }
     set rotationZ(value: number) {
         value %= 360; value *= DEGREES_TO_RADIANS;
         if (value == this._rotationZ) return;
-        this._rotationZ = value; this.rot.z = value; this.setChange(DChange.trasnform | DChange.vcdata);
+        this._rotationZ = value; this.rot.z = value; this.setChange(DChange.trasnform);
     }
 
 
@@ -130,12 +176,12 @@ export class Transform extends MiniDispatcher {
     set x(value: number) {
         if (value == this._x) return;
         this._x = value; this.pos.x = value;
-        this.setChange(DChange.trasnform | DChange.vcdata);
+        this.setChange(DChange.trasnform);
     }
     set y(value: number) {
         if (value == this._y) return;
         this._y = value; this.pos.y = value;
-        this.setChange(DChange.trasnform | DChange.vcdata);
+        this.setChange(DChange.trasnform);
     }
     set z(value: number) {
         if (value == this._z) return;
@@ -150,7 +196,7 @@ export class Transform extends MiniDispatcher {
         this.pos.y = this._y = y;
         this.pos.z = this._z = z;
         if (update) {
-            this.setChange(DChange.trasnform | DChange.vcdata);
+            this.setChange(DChange.trasnform);
         }
     }
 
@@ -159,7 +205,7 @@ export class Transform extends MiniDispatcher {
         this._rotationY = value.y * DEGREES_TO_RADIANS;
         this._rotationZ = value.z * DEGREES_TO_RADIANS;
         if (update) {
-            this.setChange(DChange.trasnform | DChange.vcdata);
+            this.setChange(DChange.trasnform);
         }
     }
 
@@ -184,7 +230,7 @@ export class Transform extends MiniDispatcher {
         this._x = pos.x;
         this._y = pos.y;
         this._z = pos.z;
-        this.setChange(DChange.trasnform | DChange.vcdata);
+        this.setChange(DChange.trasnform);
     }
 
 
@@ -202,7 +248,7 @@ export class Transform extends MiniDispatcher {
         this._x = this.pos.x;
         this._y = this.pos.y;
         this._z = this.pos.z;
-        this.setChange(DChange.trasnform | DChange.vcdata);
+        this.setChange(DChange.trasnform);
     }
 
 
@@ -220,7 +266,7 @@ export class Transform extends MiniDispatcher {
         this._x = this.pos.x;
         this._y = this.pos.y;
         this._z = this.pos.z;
-        this.setChange(DChange.trasnform | DChange.vcdata);
+        this.setChange(DChange.trasnform);
     }
 
     /**
@@ -273,7 +319,7 @@ export class Transform extends MiniDispatcher {
         this.sca.y = this._scaleY = sy;
         this.sca.z = this._scaleZ = sz;
         if (update) {
-            this.setChange(DChange.trasnform | DChange.vcdata);
+            this.setChange(DChange.trasnform);
         }
     }
 
@@ -305,7 +351,7 @@ export class Transform extends MiniDispatcher {
         this._scaleY = sca.y;
         this._scaleZ = sca.z;
 
-        this.setChange(DChange.trasnform | DChange.vcdata);
+        this.setChange(DChange.trasnform);
     }
 
 
@@ -331,9 +377,6 @@ export class Transform extends MiniDispatcher {
             childrens.push(child);
             child.parent = this;
             // child.setChange(DChange.base | DChange.batch);
-
-            this.setChange(DChange.batch | DChange.base);
-
             if (this.stage) {
                 if (!child.stage) {
                     child.stage = this.stage;
@@ -344,6 +387,8 @@ export class Transform extends MiniDispatcher {
             childrens.splice(i, 1);
             childrens.push(child);
         }
+
+        this.__afterAddChild(child);
     }
 
 
@@ -369,8 +414,10 @@ export class Transform extends MiniDispatcher {
             }
         }
 
-        this.setChange(DChange.batch);
+        this.__afterAddChild(child);
+
     }
+
 
 
     getChildIndex(child: Transform): number {
@@ -390,8 +437,10 @@ export class Transform extends MiniDispatcher {
         this.childrens.splice(i, 1);
         child.stage = undefined;
         child.parent = undefined;
-        this.setChange(DChange.batch);
+        
         child.removeFromStage();
+
+        this.__afterRemoveChild(child);
     }
 
 
@@ -406,10 +455,18 @@ export class Transform extends MiniDispatcher {
         }
 
         if (len > 0) {
-            this.setChange(DChange.batch);
+            this.__afterRemoveChild();
         }
 
         this.childrens.length = 0;
+    }
+
+    protected __afterAddChild(child:Transform){
+        child.setChange(DChange.vertex | child.status);
+    }
+
+    protected __afterRemoveChild(child?:Transform){
+        this.setChange(DChange.vertex);
     }
 
     removeFromStage() {

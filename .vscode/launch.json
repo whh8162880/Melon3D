@@ -10,6 +10,14 @@
             "name": "Launch Chrome against localhost",
             "url": "http://127.0.0.1/ts/watermelon/root/bin-debug/index.html",
             "webRoot": "${workspaceFolder}"
+        },
+
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "surface",
+            "url": "http://127.0.0.1/ts/Melon3D/bin-debug/index.html",
+            "webRoot": "${workspaceFolder}"
         }
     ]
 }
