@@ -84,7 +84,7 @@ export class Transform extends MiniDispatcher {
     pivotPonumber: IVector3D;
 
 
-    childrens: Transform[] = [];
+    childrens: Transform[];
 
     constructor() {
         super();
@@ -94,6 +94,8 @@ export class Transform extends MiniDispatcher {
 
         this.localMatrix = newMatrix3D();
         this.sceneMatrix = newMatrix3D();
+
+        this.childrens = [];
     }
 
 

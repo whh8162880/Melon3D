@@ -1,9 +1,14 @@
 import { DisplayObject } from "./DisplayObject.js";
 
 export class Sprite extends DisplayObject{
+
+    parent:Sprite;
+    stage:Sprite;
+    childrens: Sprite[];
     
     mouseEnabled = true;
     mouseChildren = true;
+    
     bounds:IBounds;
     rendeable:boolean;
 
