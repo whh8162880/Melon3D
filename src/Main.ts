@@ -6,15 +6,15 @@ export class Main extends App{
         super.init(canvas);
 
 
-        let root = new Transform();
-        let child = new Transform();
+        // let root = new Transform();
+        // let child = new Transform();
 
 
-        root.addChild(child);
-        this.addChild(root);
+        // root.addChild(child);
+        // this.addChild(root);
 
-        child.x = 100;
+        // child.x = 100;
 
-        this.updateSceneTransform();
+        // this.updateSceneTransform();
     }
 }
