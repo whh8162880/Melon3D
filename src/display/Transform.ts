@@ -516,7 +516,7 @@ export class Transform extends MiniDispatcher {
      * 
      */
     updateSceneTransform(updateStatus = 0, parentSceneTransform?: IMatrix3D) {
-        let { status, parent } = this;
+        let { status, parent ,childrens ,sceneMatrix} = this;
         if (status & DChange.trasnform) {
             this.updateTransform();
             updateStatus |= DChange.trasnform;
@@ -524,15 +524,27 @@ export class Transform extends MiniDispatcher {
 
         if (updateStatus & DChange.trasnform) {
             if (parentSceneTransform) {
-                this.sceneMatrix.m3_append(parentSceneTransform, false, this.localMatrix);
+                sceneMatrix.m3_append(parentSceneTransform, false, this.localMatrix);
             } else {
                 if (parent) {
-                    this.sceneMatrix.m3_append(parent.sceneMatrix, false, this.localMatrix);
+                    sceneMatrix.m3_append(parent.sceneMatrix, false, this.localMatrix);
                 } else {
-                    this.sceneMatrix.set(this.localMatrix);
+                    sceneMatrix.set(this.localMatrix);
                 }
             }
         }
+
+
+        if( status & DChange.CHILD_ALL ){
+
+            for (let i = 0; i < childrens.length; i++) {
+                childrens[i].updateSceneTransform( updateStatus , sceneMatrix );
+            }
+            
+            status &= ~DChange.trasnform;
+        }
+
+
 
         return updateStatus;
     }

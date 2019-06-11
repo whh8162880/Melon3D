@@ -12,7 +12,7 @@ declare const enum DChange {
     //底层Alpha变化
     CHILD_ALPHA = CHILD_HITAREA << 1,
 
-    CHILD_ALL = (CHILD_TRANSFROM | CHILD_HITAREA | CHILD_ALPHA),  
+    CHILD_ALL = (CHILD_TRANSFROM | CHILD_ALPHA),  
     // ac = (area | ca),
     // ta = (trasnform | alpha),
     // batch = vertex,

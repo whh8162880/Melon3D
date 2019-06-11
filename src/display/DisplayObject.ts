@@ -15,8 +15,6 @@ export class DisplayObject extends Transform{
 
 
     updateSceneTransform(updateStatus = 0,parentSceneTransform?:IMatrix3D) {
-        super.updateSceneTransform(updateStatus,parentSceneTransform);
-
 
         let{status,parent} = this;
         if(status & DChange.alpha){
@@ -31,6 +29,8 @@ export class DisplayObject extends Transform{
                 this.sceneAlpha = this._alpha;
             }
         }
+
+        super.updateSceneTransform( updateStatus , parentSceneTransform );
 
         return updateStatus;
     }
