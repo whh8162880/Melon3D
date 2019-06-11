@@ -1,14 +1,3 @@
-///<reference path="./ThrowError.ts" />
-
-declare module Zlib{
-    class Inflate{
-        constructor(byte:Uint8Array);
-        decompress():Uint8Array;
-    } 
-}
-
-
-declare function parseInt(s: number, radix?: number): number;
 /**
  * 对数字进行补0操作
  * @param value 要补0的数值
@@ -411,6 +400,7 @@ Object.defineProperties(Number.prototype, makeDefDescriptors({
 
 /****************************************扩展String****************************************/
 interface String {
+    subHandler : { [key:string]:Function };
     /**
      * 替换字符串中{0}{1}{2}{a} {b}这样的数据，用obj对应key替换，或者是数组中对应key的数据替换
      */
@@ -500,6 +490,7 @@ interface StringConstructor {
      * @return 补0之后的字符串
      */
     zeroize: (value: number, length: number) => string;
+
     /**
      * 注册substitute的回调
      * 
@@ -517,6 +508,7 @@ interface StringConstructor {
      * @memberOf StringConstructor
      */
     subHandler: Readonly<{ [index: string]: { (input: any): string } }>;
+
 }
 
 String.zeroize = zeroize;
@@ -795,89 +787,3 @@ Object.defineProperties(Array.prototype, makeDefDescriptors({
         }
     }
 }));
-module rf {
-    export function getQualifiedClassName(value:any):string {
-        let type = typeof value;
-        if (!value || (type != "object"&&!value.prototype)) {
-            return type;
-        }
-        let prototype:any = value.prototype ? value.prototype : Object.getPrototypeOf(value);
-        if (prototype.hasOwnProperty("__class__")) {
-            return prototype["__class__"];
-        }
-        let constructorString:string = prototype.constructor.toString().trim();
-        let index:number = constructorString.indexOf("(");
-        let className:string = constructorString.substring(9, index);
-        Object.defineProperty(prototype, "__class__", {
-            value: className,
-            enumerable: false,
-            writable: true
-        });
-        return className;
-	}
-	
-	export function getQualifiedSuperclassName(value:any):string {
-        if (!value || (typeof value != "object" && !value.prototype)) {
-            return null;
-        }
-        let prototype:any = value.prototype ? value.prototype : Object.getPrototypeOf(value);
-        let superProto = Object.getPrototypeOf(prototype);
-        if (!superProto) {
-            return null;
-        }
-        let superClass = getQualifiedClassName(superProto.constructor);
-        if (!superClass) {
-            return null;
-        }
-        return superClass;
-    }
-
-    export function is(instance: any, ref: { new(): any }): boolean {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        let prototype:any = Object.getPrototypeOf(instance);
-        let types = prototype ? prototype.__types__ : null;
-        if (!types) {
-            return false;
-        }
-        return (types.indexOf(getQualifiedClassName(ref)) !== -1);
-    }
-
-
-    export function toString(instance:any,defaultValue:string = ""){
-        if(!instance){
-            return defaultValue;
-        } 
-
-        
-    }
-
-
-    export function clone(from:any,to?:any){
-        if(!to){
-            to = {};
-        }
-        for(let key in from){
-            to[key] = from[key];
-        }
-        return to;
-    }
-
-
-
-    export function properties(target: any, key: string) {
-        let old = target[key];
-        Object.defineProperty(target, key, {
-            get() {
-                return old;
-            },
-
-            set(value: any) {
-                old = value;
-            },
-            configurable: true,
-            enumerable: true
-        })
-    }
-}

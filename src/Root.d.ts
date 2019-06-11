@@ -87,3 +87,12 @@ declare const enum ResType {
      */
     image
 }
+
+declare module Zlib{
+    class Inflate{
+        constructor(byte:Uint8Array);
+        decompress():Uint8Array;
+    } 
+}
+
+declare function parseInt(s: number, radix?: number): number;
