@@ -80,8 +80,8 @@ export class Transform extends MiniDispatcher {
     parent: Transform;
     stage: Transform;
 
-    pivotZero = false;
-    pivotPonumber: IVector3D;
+    // pivotZero = false;
+    // pivotPonumber: IVector3D;
 
 
     childrens: Transform[];
@@ -327,14 +327,14 @@ export class Transform extends MiniDispatcher {
 
 
 
-    setPivotPonumber(x: number, y: number, z: number): void {
-        let { pivotPonumber } = this;
-        if (undefined == pivotPonumber) { this.pivotPonumber = newVector3D() };
-        pivotPonumber.x = x;
-        pivotPonumber.y = y;
-        pivotPonumber.z = z;
-        this.pivotZero = (x != 0 || y != 0 || z != 0);
-    }
+    // setPivotPonumber(x: number, y: number, z: number): void {
+    //     let { pivotPonumber } = this;
+    //     if (undefined == pivotPonumber) { this.pivotPonumber = newVector3D() };
+    //     pivotPonumber.x = x;
+    //     pivotPonumber.y = y;
+    //     pivotPonumber.z = z;
+    //     this.pivotZero = (x != 0 || y != 0 || z != 0);
+    // }
 
 
     setTransform(matrix: ArrayLike<number>): void {
@@ -498,17 +498,18 @@ export class Transform extends MiniDispatcher {
      * 
      */
     updateTransform() {
-        const { localMatrix, pivotZero } = this;
-        if (pivotZero) {
-            const { pivotPonumber } = this;
-            let { 0: x, 1: y, 2: z } = pivotPonumber;
-            localMatrix.m3_identity();
-            localMatrix.m3_translation(-x, -y, -z);
-            localMatrix.m3_scale(this._scaleX, this._scaleY, this._scaleZ);
-            localMatrix.m3_translation(this._x + x, this._y + y, this._z + z);
-        } else {
+        const { localMatrix/*, pivotZero*/ } = this;
+        //放弃支持 pivotZero Rot的快速matrix算法没有搞定。
+        // if (pivotZero) {
+        //     const { pivotPonumber } = this;
+        //     let { 0: x, 1: y, 2: z } = pivotPonumber;
+        //     localMatrix.m3_identity();
+        //     localMatrix.m3_translation(-x, -y, -z);
+        //     localMatrix.m3_scale(this._scaleX, this._scaleY, this._scaleZ);
+        //     localMatrix.m3_translation(this._x + x, this._y + y, this._z + z);
+        // } else {
             localMatrix.m3_recompose(this.pos, this.rot, this.sca)
-        }
+        // }
 
         this.status &= ~DChange.trasnform;
     }
