@@ -444,24 +444,6 @@ Object.defineProperties(Float32Array.prototype, {
     }
 })
 
-export interface IVector3D extends IArrayBase {
-    x: number;
-    y: number;
-    z: number;
-    w: number;
-    v3_lengthSquared: number;
-    v2_length: number;
-    v3_length: number;
-    v3_add(v: IVector3D | ArrayLike<number>, out?:IVector3D): IVector3D;
-    v3_sub(v: IVector3D | ArrayLike<number>, out?:IVector3D): IVector3D;
-    v3_scale(v: number);
-    v4_scale(v: number);
-    v3_normalize(from?: ArrayLike<number>);
-    v3_dotProduct(t: ArrayLike<number>);
-    v3_crossProduct(t: ArrayLike<number>, out?: IVector3D | number[]);
-    v3_applyMatrix4(e: ArrayLike<number>, out?: IVector3D | number[])
-}
-
 Object.defineProperties(Float32Array.prototype, {
     v3_lengthSquared: {
         get() {
@@ -711,10 +693,6 @@ Object.defineProperties(Float32Array.prototype, {
     }
 });
 
-
-interface Float32Array extends IMatrix3D, IMatrix, IVector3D {
-
-}
 
 export function newMatrix3D(v?: ArrayLike<number> | ArrayBuffer) {
     let out: Float32Array;

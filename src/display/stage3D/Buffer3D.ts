@@ -1,7 +1,7 @@
 import { BitmapData } from "../../core/BitmapData.js";
 import { RES_PERFIX } from "../../core/CONFIG.js";
 import { engineNow } from "../../core/Engine.js";
-import { Loader, loadRes, LoadStates, ResType } from "../../core/Http.js";
+import { Loader, loadRes } from "../../core/Http.js";
 import { EventX } from "../../core/MiniDispatcher.js";
 import { ThrowError } from "../../core/ThrowError.js";
 import { IContext3DSetting } from "./Context3D.js";

@@ -1,5 +1,5 @@
 
-interface ILaunchData{
+declare interface ILaunchData{
     ticket:string;
     time:number;
     md5:string;
@@ -17,7 +17,7 @@ interface ILaunchData{
 }
 
 
-interface IPANEL_TWEEN_DATA{
+declare interface IPANEL_TWEEN_DATA{
     type:string;
     time:number;
     duration?:number;
@@ -41,4 +41,49 @@ interface IPANEL_TWEEN_DATA{
     sp?:number;
 
     rt?:boolean
+}
+
+
+
+/**
+ * 加载优先级枚举
+ */
+declare const enum LoadPriority {
+    low,
+    middle,
+    high,
+    max,
+}
+
+declare const enum LoadStates {
+    WAIT,
+    LOADING,
+    COMPLETE,
+    FAILED
+}
+
+/**
+ * 资源类型
+ */
+declare const enum ResType {
+    /**
+     * 二进制
+     */
+    bin,
+
+    amf,
+
+    amf_inflate,
+    /**
+     * 文本
+     */
+    text,
+    /**
+     * 音乐
+     */
+    sound,
+    /**
+     * 图片
+     */
+    image
 }

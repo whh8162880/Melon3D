@@ -6,52 +6,7 @@ import { byte_inflate, amf_readObject } from "./AMF3.js";
 
 export var HTTP_REPOSITORY:{[key:string]:Loader} = {};
 
-
 export type LoaderType = new(perfix:string,url:string) => Loader;
-
-/**
- * 加载优先级枚举
- */
-export const enum LoadPriority {
-    low,
-    middle,
-    high,
-    max,
-}
-
-export const enum LoadStates {
-    WAIT,
-    LOADING,
-    COMPLETE,
-    FAILED
-}
-
-/**
- * 资源类型
- */
-export const enum ResType {
-    /**
-     * 二进制
-     */
-    bin,
-
-    amf,
-
-    amf_inflate,
-    /**
-     * 文本
-     */
-    text,
-    /**
-     * 音乐
-     */
-    sound,
-    /**
-     * 图片
-     */
-    image
-}
-
 
 export interface IResHandler {
     complete: EventHandler;
