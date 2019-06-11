@@ -1,4 +1,5 @@
 import { DisplayObject } from "./DisplayObject.js";
+import { Graphics } from "./Graphics.js";
 
 export class Sprite extends DisplayObject{
 
@@ -11,6 +12,16 @@ export class Sprite extends DisplayObject{
     
     bounds:IBounds;
     rendeable:boolean;
+
+    $graphics:Graphics;
+
+    get graphics(){
+        let{$graphics} = this;
+        if(!$graphics){
+            this.$graphics = $graphics = new Graphics();
+        }
+        return $graphics;
+    }
 
     getObjectByPoint(dx: number, dy: number,scale:number): DisplayObject{
         return undefined;
