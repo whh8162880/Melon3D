@@ -107,7 +107,7 @@ export class VertexInfo {
     data32PerVertex: number = 0;
     variables: { [key: string]: IVariable };
 
-    constructor(value: number | Float32Array, data32PerVertex: number,variables?:{ [key: string]: IVariable }) {
+    constructor(value: number[] | Float32Array, data32PerVertex: number,variables?:{ [key: string]: IVariable }) {
         if (value instanceof Float32Array) {
             this.vertex = value
         } else {

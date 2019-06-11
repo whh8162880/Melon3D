@@ -7,11 +7,14 @@ export class App extends Sprite implements ITickable,IResizeable{
     init(canvas:HTMLCanvasElement){
         wx.no_maincanvas = canvas;
 
+        //创建webgl
         let stage3d = singleton(Stage3D);
         if(false == stage3d.requestContext3D(canvas)){
             console.log("GL create fail");
             return;
         }
+
+        //初始化所有需求的属性
         
         // this.initCanvas(canvas);
         // this.initContainer(ROOT.camera2D,true);
