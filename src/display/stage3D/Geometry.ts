@@ -6,7 +6,7 @@ import { DisplayObject } from "../DisplayObject.js";
 import { context3D } from "./Stage3D.js";
 import { DEGREES_TO_RADIANS } from "../../core/CONFIG.js";
 
-export let vertex_ui_variable:{ [key: string]: IVariable } = {
+export let vertex_ui_variable:IVariables = {
     //x,y,z,u,v,index,r,g,b,a
     "pos":{size:3,offset:0},
     "uv":{size:4,offset:3}, //xy uv ~~ z index
@@ -14,19 +14,7 @@ export let vertex_ui_variable:{ [key: string]: IVariable } = {
     "data32PerVertex":{size:11,offset:0}
 }
 
-/**
- * 可合并的UI对象完整体
- */
-export let vertex_ui_full_variable:{ [key: string]: IVariable } = {
-    //x,y,z,u,v,index,r,g,b,a
-    "pos":{size:3,offset:0},
-    "normal":{size:3,offset:3},
-    "uv":{size:4,offset:6}, //xy uv ~~ z index
-    "color":{size:4,offset:10},
-    "data32PerVertex":{size:14,offset:0}
-}
-
-export let vertex_mesh_variable:{ [key: string]: IVariable } = {
+export let vertex_mesh_variable:IVariables = {
     "pos":{size:3,offset:0},
     "normal":{size:3,offset:3},
     "uv":{size:2,offset:6},
@@ -34,7 +22,7 @@ export let vertex_mesh_variable:{ [key: string]: IVariable } = {
 }
 
 
-export let vertex_mesh_full_variable:{ [key: string]: IVariable } = {
+export let vertex_mesh_full_variable:IVariables = {
     "pos":{size:3,offset:0},
     "normal":{size:3,offset:3},
     "uv":{size:2,offset:6},
@@ -43,7 +31,7 @@ export let vertex_mesh_full_variable:{ [key: string]: IVariable } = {
 }
 
 
-export let vertex_skeleton_variable:{ [key: string]: IVariable } = {
+export let vertex_skeleton_variable:IVariables = {
     "index":{size:4,offset:0},
     "weight":{size:4,offset:4},
     "data32PerVertex":{size:8,offset:0}
@@ -72,7 +60,7 @@ export let empty_float32_object:{ [key: string]: Float32Array } = {
  * uv:Float32Array
  * color:Float32Array
  */
-export function createGeometry(data:{ [key: string]: Float32Array },variables:{ [key: string]: IVariable },numVertices:number,result?:Float32Array):Float32Array{
+export function createGeometry(data:{ [key: string]: Float32Array },variables:IVariables,numVertices:number,result?:Float32Array):Float32Array{
     let data32PerVertex = variables["data32PerVertex"].size;
     if(undefined == result){
         result = new Float32Array(data32PerVertex * numVertices);
@@ -105,9 +93,9 @@ export class VertexInfo {
     vertex: Float32Array;
     numVertices: number = 0;
     data32PerVertex: number = 0;
-    variables: { [key: string]: IVariable };
+    variables: IVariables;
 
-    constructor(value: number[] | Float32Array, data32PerVertex: number,variables?:{ [key: string]: IVariable }) {
+    constructor(value: number[] | Float32Array, data32PerVertex: number,variables?:IVariables) {
         if (value instanceof Float32Array) {
             this.vertex = value
         } else {
@@ -291,7 +279,7 @@ export class VertexInfo {
 //     }
 // }
 
-export interface IGeometry {
+export interface IGeometryItem {
     vertex: VertexBuffer3D;
     index?: IndexBuffer3D;
 }
@@ -330,7 +318,7 @@ export class Temp_Float32Byte implements IRecyclable{
 }
 
 
-export function geometry_plane(width:number,height:number,position:number,variables:{ [key: string]: IVariable },matrix3D?:IMatrix3D){
+export function geometry_plane(width:number,height:number,position:number,variables:IVariables,matrix3D?:IMatrix3D){
 
     let width_half = width * 0.5;
     let height_half = height * 0.5;
@@ -384,12 +372,12 @@ export function geometry_plane(width:number,height:number,position:number,variab
     }
 }
 
-export class GeometryBase implements IGeometry{
-    variables:{ [key: string]: IVariable };
+export class GeometryBase implements IGeometryItem{
+    variables:IVariables;
     vertex:VertexBuffer3D;
     index:IndexBuffer3D;
     data:IMeshData;
-    constructor(variables?:{ [key: string]: IVariable }){
+    constructor(variables?:IVariables){
         if(undefined == variables){
             variables = vertex_mesh_variable;
         }

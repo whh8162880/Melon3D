@@ -14,11 +14,12 @@ export class Sprite extends DisplayObject{
     rendeable:boolean;
 
     $graphics:Graphics;
+    variables:IVariables;
 
     get graphics(){
         let{$graphics} = this;
         if(!$graphics){
-            this.$graphics = $graphics = new Graphics();
+            this.$graphics = $graphics = new Graphics(this);
         }
         return $graphics;
     }

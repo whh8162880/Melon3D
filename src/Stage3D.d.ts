@@ -219,6 +219,10 @@ declare interface IVariable{
     offset:number;
 }
 
+declare interface IVariables{
+    [key:string] : IVariable
+}
+
 
 declare interface Buffer3D extends IRecyclable{
     preusetime:number
@@ -250,9 +254,6 @@ declare interface ITextureData{
     mix:number;
     repeat:number;
 }
-
-
-
 
 
 declare interface IRecyclable {
@@ -343,4 +344,11 @@ declare interface IMouseEventData {
     time:number;
     target:any;
     identifier:number;
+}
+
+
+declare interface IGeometry{
+    numVertices:number
+    vertex:Float32Array;
+    variables:IVariables;
 }
