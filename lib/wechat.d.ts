@@ -41,7 +41,7 @@ declare module wx {
     var no_softKeyboard: boolean;
     var no_stageWidth: number;
     var no_stageHeight: number;
-    function createCanvas(): HTMLCanvasElement | OffscreenCanvas;
+    function createCanvas(): any;
     function createImage(): HTMLImageElement;
     function setPreferredFramesPerSecond(fps: number): void;
     interface ISystemInfo {

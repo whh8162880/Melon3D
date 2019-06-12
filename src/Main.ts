@@ -27,7 +27,7 @@ export class Main extends App{
 
 
         let vs = `
-            uniform vec2 pos;
+            attribute vec2 pos;
             void main(){
                 gl_Position = vec4(pos,0.0,0.0);
             }
