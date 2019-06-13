@@ -1,10 +1,13 @@
-import { VertexBuffer3D, IndexBuffer3D, VA, Program3D, VC } from "./Buffer3D.js";
-import { TEMP_VECTOR3D, TEMP_MATRIX3D, Y_AXIS, X_AXIS } from "../../core/Geom.js";
-import { newVector3D, newMatrix3D } from "../../core/Matrix3D.js";
-import { Camera } from "./camera/Camera.js";
-import { DisplayObject } from "../DisplayObject.js";
-import { context3D } from "./Stage3D.js";
 import { DEGREES_TO_RADIANS } from "../../core/CONFIG.js";
+import { TEMP_MATRIX3D, TEMP_VECTOR3D, X_AXIS, Y_AXIS } from "../../core/Geom.js";
+import { newMatrix3D, newVector3D } from "../../core/Matrix3D.js";
+import { DisplayObject } from "../DisplayObject.js";
+import { VA, VC } from "./buffer/Buffer3D.js";
+import { Camera } from "./camera/Camera.js";
+import { context3D } from "./Stage3D.js";
+import { VertexBuffer3D } from "./buffer/VertexBuffer3D.js";
+import { IndexBuffer3D } from "./buffer/IndexBuffer3D.js";
+import { Program3D } from "./buffer/Program3D.js";
 
 export let vertex_ui_variable:IVariables = {
     //x,y,z,u,v,index,r,g,b,a
@@ -89,10 +92,10 @@ export function createGeometry(data:{ [key: string]: Float32Array },variables:IV
 } 
 
 
-export class VertexInfo {
+export class VertexInfo implements IGeometry {
     vertex: Float32Array;
-    numVertices: number = 0;
-    data32PerVertex: number = 0;
+    numVertices = 0;
+    data32PerVertex = 0;
     variables: IVariables;
 
     constructor(value: number[] | Float32Array, data32PerVertex: number,variables?:IVariables) {

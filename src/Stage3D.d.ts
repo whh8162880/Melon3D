@@ -218,5 +218,6 @@ declare interface ITextureData{
 declare interface IGeometry{
     numVertices:number
     vertex:Float32Array;
-    variables:IVariables;
+    data32PerVertex: number;
+    variables: IVariables;
 }

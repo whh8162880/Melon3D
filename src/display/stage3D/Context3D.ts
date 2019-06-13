@@ -1,14 +1,17 @@
-import { Link } from "../../core/Link.js";
-import { VertexInfo } from "./Geometry.js";
-import { VertexBuffer3D, IndexBuffer3D, Texture, RTTexture, CubeTexture, Program3D, Buffer3D } from "./Buffer3D.js";
-import { recyclable, Recyclable } from "../../core/ClassUtils.js";
-import { ThrowError } from "../../core/ThrowError.js";
 import { BitmapData } from "../../core/BitmapData.js";
-import { engineNow } from "../../core/Engine.js";
-import { TEMP_VECTOR3D, size_intersection } from "../../core/Geom.js";
+import { recyclable, Recyclable } from "../../core/ClassUtils.js";
 import { TEMP_RECT } from "../../core/CONFIG.js";
+import { engineNow } from "../../core/Engine.js";
+import { size_intersection, TEMP_VECTOR3D } from "../../core/Geom.js";
+import { Link } from "../../core/Link.js";
 import { newMatrix3D } from "../../core/Matrix3D.js";
+import { ThrowError } from "../../core/ThrowError.js";
+import { VertexInfo } from "./Geometry.js";
 import { gl } from "./Stage3D.js";
+import { VertexBuffer3D } from "./buffer/VertexBuffer3D.js";
+import { IndexBuffer3D } from "./buffer/IndexBuffer3D.js";
+import { Texture, CubeTexture, RTTexture } from "./buffer/Texture.js";
+import { Program3D } from "./buffer/Program3D.js";
 
 
 export var scissorRect:Size;
@@ -146,23 +149,23 @@ export class Context3D {
 		this.backBufferHeight = height;
 		g.viewport(0, 0, width, height);
 
-		this._clearBit = g.COLOR_BUFFER_BIT | g.DEPTH_BUFFER_BIT | g.STENCIL_BUFFER_BIT;
+		this._clearBit = WebGLConst.COLOR_BUFFER_BIT | WebGLConst.DEPTH_BUFFER_BIT | WebGLConst.STENCIL_BUFFER_BIT;
 
-		g.disable(g.DEPTH_TEST);
-		g.disable(g.CULL_FACE);
+		g.disable(WebGLConst.DEPTH_TEST);
+		g.disable(WebGLConst.CULL_FACE);
 		// this._clearBit = 
-		g.enable(g.BLEND);
+		g.enable(WebGLConst.BLEND);
 		g.colorMask(true, true, true, true);
 		
 		this.setting = this.createEmptyContext3DSetting();
 		this.render_setting = {} as IContext3DSetting;
 
 
-		g.activeTexture(g.TEXTURE0);
-		g.activeTexture(g.TEXTURE1);
+		g.activeTexture(WebGLConst.TEXTURE0);
+		g.activeTexture(WebGLConst.TEXTURE1);
 
-		// g.frontFace(g.CW);
-		// g.enable(g.BLEND);
+		// g.frontFace(WebGLConst.CW);
+		// g.enable(WebGLConst.BLEND);
 	}
 
 
@@ -170,7 +173,7 @@ export class Context3D {
 		let current = scissorRect;
 		let g = gl;
 		if(current && !rect){
-			g.disable(g.SCISSOR_TEST);
+			g.disable(WebGLConst.SCISSOR_TEST);
 		}
 		scissorRect = rect;
 		if(rect){
@@ -197,7 +200,7 @@ export class Context3D {
 		if(!rect){
 			if(current){
 				let g = gl;
-				g.disable(g.SCISSOR_TEST);
+				g.disable(WebGLConst.SCISSOR_TEST);
 			}
 		}else{
 
@@ -223,7 +226,7 @@ export class Context3D {
 
 			if(!current){
 				let g = gl;
-				g.enable(g.SCISSOR_TEST);
+				g.enable(WebGLConst.SCISSOR_TEST);
 				temp_rect.x = x;
 				temp_rect.y = y;
 				temp_rect.w = w;
@@ -277,9 +280,9 @@ export class Context3D {
 		//剔除这个 暂时不用
 		if(cull != render_setting.cull){
 			if(cull == 0){
-				g.disable(g.CULL_FACE);
+				g.disable(WebGLConst.CULL_FACE);
 			}else{
-				g.enable(g.CULL_FACE);
+				g.enable(WebGLConst.CULL_FACE);
 				g.cullFace(cull);
 			}
 			render_setting.cull = cull;
@@ -288,22 +291,22 @@ export class Context3D {
 
 		if(depth != render_setting.depth || depthMode != render_setting.depthMode){
 			// depthMode:
-			// gl.NEVER（永不通过）
-			// gl.LESS（如果传入值小于深度缓冲值，则通过）
-			// gl.EQUAL（如果传入值等于深度缓冲区值，则通过）
-			// gl.LEQUAL（如果传入值小于或等于深度缓冲区值，则通过）
-			// gl.GREATER（如果传入值大于深度缓冲区值，则通过）
-			// gl.NOTEQUAL（如果传入的值不等于深度缓冲区值，则通过）
-			// gl.GEQUAL（如果传入值大于或等于深度缓冲区值，则通过）
-			// gl.ALWAYS（总是通过）
+			// WebGLConst.NEVER（永不通过）
+			// WebGLConst.LESS（如果传入值小于深度缓冲值，则通过）
+			// WebGLConst.EQUAL（如果传入值等于深度缓冲区值，则通过）
+			// WebGLConst.LEQUAL（如果传入值小于或等于深度缓冲区值，则通过）
+			// WebGLConst.GREATER（如果传入值大于深度缓冲区值，则通过）
+			// WebGLConst.NOTEQUAL（如果传入的值不等于深度缓冲区值，则通过）
+			// WebGLConst.GEQUAL（如果传入值大于或等于深度缓冲区值，则通过）
+			// WebGLConst.ALWAYS（总是通过）
 			render_setting.depth = depth;
 			render_setting.depthMode = depthMode;
-			if(depth == false && render_setting.depthMode == g.ALWAYS){
-				g.disable(g.DEPTH_TEST);
+			if(depth == false && render_setting.depthMode == WebGLConst.ALWAYS){
+				g.disable(WebGLConst.DEPTH_TEST);
 				g.depthMask(depth);
 				g.depthFunc(depthMode);
 			}else{
-				g.enable(g.DEPTH_TEST);
+				g.enable(WebGLConst.DEPTH_TEST);
 				g.depthMask(depth);
 				g.depthFunc(depthMode);
 			}
@@ -530,12 +533,12 @@ export class Context3D {
 
 		let{frameBuffer,renderBuffer,texture:textureObj,width,height,cleanColor} = texture;
 		g.viewport(0,0,width,height);
-		g.bindFramebuffer(g.FRAMEBUFFER,frameBuffer);
+		g.bindFramebuffer(WebGLConst.FRAMEBUFFER,frameBuffer);
 
 		if (enableDepthAndStencil) {
-			texture.cleanBit = g.COLOR_BUFFER_BIT | g.DEPTH_BUFFER_BIT | g.STENCIL_BUFFER_BIT;
+			texture.cleanBit = WebGLConst.COLOR_BUFFER_BIT | WebGLConst.DEPTH_BUFFER_BIT | WebGLConst.STENCIL_BUFFER_BIT;
 		} else {
-			texture.cleanBit = g.COLOR_BUFFER_BIT | g.DEPTH_BUFFER_BIT | g.STENCIL_BUFFER_BIT;
+			texture.cleanBit = WebGLConst.COLOR_BUFFER_BIT | WebGLConst.DEPTH_BUFFER_BIT | WebGLConst.STENCIL_BUFFER_BIT;
 		}
 
 		texture.setting.src = -1;
@@ -562,11 +565,11 @@ export class Context3D {
 		let texture = rttTextures[rttTextures.length - 1];
 		if(texture){
 			let{frameBuffer,width,height}=texture;
-			g.bindFramebuffer(g.FRAMEBUFFER, frameBuffer);
+			g.bindFramebuffer(WebGLConst.FRAMEBUFFER, frameBuffer);
 			g.viewport(0,0,width,height);
 		}else{
 			let{backBufferWidth,backBufferHeight}=this;
-			g.bindFramebuffer(g.FRAMEBUFFER, null);
+			g.bindFramebuffer(WebGLConst.FRAMEBUFFER, null);
 			g.viewport(0,0,backBufferWidth,backBufferHeight);
 		}
 
@@ -675,11 +678,11 @@ export class Context3D {
 				}
 			}
 			indexBuffer.preusetime = engineNow;
-			// g.drawArrays(g.TRIANGLES,0,numTriangles)
-			g.bindBuffer(g.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
-			g.drawElements(g.TRIANGLES, numTriangles * 3, g.UNSIGNED_SHORT, offset * 6);
+			// g.drawArrays(WebGLConst.TRIANGLES,0,numTriangles)
+			g.bindBuffer(WebGLConst.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
+			g.drawElements(WebGLConst.TRIANGLES, numTriangles * 3, WebGLConst.UNSIGNED_SHORT, offset * 6);
 		}else{
-			g.drawArrays(g.TRIANGLES,0,numTriangles * 3);
+			g.drawArrays(WebGLConst.TRIANGLES,0,numTriangles * 3);
 		}
 		
 		this.triangles += numTriangles;
@@ -689,7 +692,7 @@ export class Context3D {
 		// 	this.texIndex -- ;
 		// 	gl.texture
 		// }
-		// g.activeTexture(g.TEXTURE0);
+		// g.activeTexture(WebGLConst.TEXTURE0);
 
 		this.texIndex = 0;
 	}
@@ -713,8 +716,8 @@ export class Context3D {
 	// 		}
 	// 		indexBuffer.preusetime = engineNow;
 	// 		let g = gl;
-	// 		g.bindBuffer(g.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
-	// 		g.drawElements(g.LINES, numTriangles < 0 ? indexBuffer.numIndices : numTriangles * 3, g.UNSIGNED_SHORT, firstIndex * 2);
+	// 		g.bindBuffer(WebGLConst.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
+	// 		g.drawElements(WebGLConst.LINES, numTriangles < 0 ? indexBuffer.numIndices : numTriangles * 3, WebGLConst.UNSIGNED_SHORT, firstIndex * 2);
 	// 	}
 
 	// 	this.triangles += numTriangles;
@@ -731,8 +734,8 @@ export class Context3D {
 	// 			throw new Error("create indexBuffer error!");
 	// 		}
 	// 	}
-	// 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
-	// 	gl.drawElements(gl.POINTS, numPoints < 0 ? indexBuffer.numIndices : numPoints, gl.UNSIGNED_SHORT, firstIndex * 2);
+	// 	gl.bindBuffer(WebGLConst.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
+	// 	gl.drawElements(WebGLConst.POINTS, numPoints < 0 ? indexBuffer.numIndices : numPoints, WebGLConst.UNSIGNED_SHORT, firstIndex * 2);
 	// }
 
 	// /**
@@ -745,8 +748,8 @@ export class Context3D {
 	// 			throw new Error("create indexBuffer error!");
 	// 		}
 	// 	}
-	// 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
-	// 	gl.drawElements(gl.LINE_LOOP, numPoints < 0 ? indexBuffer.numIndices : numPoints, gl.UNSIGNED_SHORT, firstIndex * 2);
+	// 	gl.bindBuffer(WebGLConst.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
+	// 	gl.drawElements(WebGLConst.LINE_LOOP, numPoints < 0 ? indexBuffer.numIndices : numPoints, WebGLConst.UNSIGNED_SHORT, firstIndex * 2);
 	// }
 
 	// /**
@@ -759,11 +762,11 @@ export class Context3D {
 	// 			throw new Error("create indexBuffer error!");
 	// 		}
 	// 	}
-	// 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
+	// 	gl.bindBuffer(WebGLConst.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
 	// 	gl.drawElements(
-	// 		gl.LINE_STRIP,
+	// 		WebGLConst.LINE_STRIP,
 	// 		numPoints < 0 ? indexBuffer.numIndices : numPoints,
-	// 		gl.UNSIGNED_SHORT,
+	// 		WebGLConst.UNSIGNED_SHORT,
 	// 		firstIndex * 2
 	// 	);
 	// }
@@ -778,8 +781,8 @@ export class Context3D {
 	// 			throw new Error("create indexBuffer error!");
 	// 		}
 	// 	}
-	// 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
-	// 	gl.drawElements(gl.TRIANGLE_STRIP, indexBuffer.numIndices, gl.UNSIGNED_SHORT, 0);
+	// 	gl.bindBuffer(WebGLConst.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
+	// 	gl.drawElements(WebGLConst.TRIANGLE_STRIP, indexBuffer.numIndices, WebGLConst.UNSIGNED_SHORT, 0);
 	// }
 
 	// /**
@@ -794,8 +797,8 @@ export class Context3D {
 	// 			throw new Error("create indexBuffer error!");
 	// 		}
 	// 	}
-	// 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
-	// 	gl.drawElements(gl.TRIANGLE_FAN, indexBuffer.numIndices, gl.UNSIGNED_SHORT, 0);
+	// 	gl.bindBuffer(WebGLConst.ELEMENT_ARRAY_BUFFER, indexBuffer.buffer);
+	// 	gl.drawElements(WebGLConst.TRIANGLE_FAN, indexBuffer.numIndices, WebGLConst.UNSIGNED_SHORT, 0);
 	// }
 
 	/**
@@ -807,7 +810,7 @@ export class Context3D {
 	// 	var tex: Texture = this._texCache[keyInCache];
 	// 	gl.activeTexture(gl['TEXTURE' + tex.textureUnit]);
 
-	// 	gl.TEXTURE31\
+	// 	WebGLConst.TEXTURE31\
 	// 	var l: WebGLUniformLocation = gl.getUniformLocation(this._linkedProgram.program, keyInCache);
 	// 	gl.uniform1i(l, tex.textureUnit); // TODO:multiple textures
 	// }
@@ -854,7 +857,6 @@ export class Context3D {
 	}
 }
 
-
 /**
  * todo
  */
@@ -869,11 +871,11 @@ export function webGLSimpleReport(): Object {
 
 	let g = gl;
 
-	g.getParameter(g.MAX_VERTEX_ATTRIBS);
-	g.getParameter(g.MAX_VERTEX_UNIFORM_VECTORS);
-	g.getParameter(g.MAX_FRAGMENT_UNIFORM_VECTORS);
-	g.getParameter(g.MAX_VARYING_VECTORS);
-	g.getParameter(g.MAX_TEXTURE_IMAGE_UNITS);
+	g.getParameter(WebGLConst.MAX_VERTEX_ATTRIBS);
+	g.getParameter(WebGLConst.MAX_VERTEX_UNIFORM_VECTORS);
+	g.getParameter(WebGLConst.MAX_FRAGMENT_UNIFORM_VECTORS);
+	g.getParameter(WebGLConst.MAX_VARYING_VECTORS);
+	g.getParameter(WebGLConst.MAX_TEXTURE_IMAGE_UNITS);
 
 
 

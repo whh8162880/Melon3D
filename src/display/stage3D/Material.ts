@@ -1,8 +1,7 @@
 export class Material {
-    cull: number;
-    srcFactor: number;
-    dstFactor: number;
-    depthMask: boolean = false;
-    passCompareMode: number;
-    alphaTest: number;
+    cull = WebGLConst.NONE;
+    srcFactor = WebGLConst.SRC_ALPHA;
+    dstFactor = WebGLConst.ONE_MINUS_SRC_ALPHA;
+    depthMask = false;
+    passCompareMode = WebGLConst.LEQUAL;
 }
