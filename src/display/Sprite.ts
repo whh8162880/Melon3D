@@ -11,7 +11,7 @@ export class Sprite extends DisplayObject{
     mouseChildren = true;
     
     bounds:IBounds;
-    rendeable:boolean;
+    nativeRender:boolean;
 
     $graphics:Graphics;
     variables:IVariables;
