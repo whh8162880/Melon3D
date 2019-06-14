@@ -55,4 +55,9 @@ export class Stage3D extends Sprite{
         this.simpleDispatch(EventT.CONTEXT3D_CREATE, gl);
         return true;
     }
+
+
+    resize(width: number, height: number) {
+        
+    }
 }

@@ -1,5 +1,6 @@
 import { DisplayObject } from "./DisplayObject.js";
 import { Graphics } from "./Graphics.js";
+import { vertex_ui_variable } from "./stage3D/Geometry.js";
 
 export class Sprite extends DisplayObject{
 
@@ -15,6 +16,11 @@ export class Sprite extends DisplayObject{
 
     $graphics:Graphics;
     variables:IVariables;
+
+    constructor(variables?:IVariables){
+        super();
+        this.variables = variables || vertex_ui_variable;
+    }
 
     get graphics(){
         let{$graphics} = this;

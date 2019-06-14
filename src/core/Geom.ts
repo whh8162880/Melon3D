@@ -19,19 +19,6 @@ export function size_intersection(a:Size,b:Size,c?:Size){
     return c;
 }
 
-export interface IFrame extends Size{
-    ix:number;
-    iy:number;
-}
-
-export interface IUVFrame extends IFrame{
-    ul:number;
-    ur:number;
-    vt:number;
-    vb:number;
-}
-
-
 export let rgb_color_temp:IVector3D = new Float32Array([1,1,1,1]);
 
 

@@ -1,5 +1,5 @@
 import { Sprite } from "./display/Sprite.js";
-import { Stage3D } from "./display/stage3D/Stage3D.js";
+import { Stage3D, context3D, ROOT } from "./display/stage3D/Stage3D.js";
 import { singleton } from "./core/ClassUtils.js";
 
 export class App extends Sprite implements ITickable,IResizeable{
@@ -36,7 +36,8 @@ export class App extends Sprite implements ITickable,IResizeable{
 
 
     resize(width: number, height: number){
-
+        context3D.configureBackBuffer(innerWidth,innerHeight,0);
+        ROOT.resize(innerWidth,innerHeight);
     }
 
     update(now: number, interval: number){

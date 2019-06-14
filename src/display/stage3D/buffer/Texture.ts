@@ -10,7 +10,7 @@ import { IContext3DSetting } from "../Context3D.js";
 
 export class Texture extends Buffer3D {
     key: number | string;
-    data: ITextureData;
+    data: ITextureSetting;
     texture: WebGLTexture;
     width: number = 0;
     height: number = 0;

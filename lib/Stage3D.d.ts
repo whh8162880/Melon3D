@@ -38,6 +38,20 @@ declare interface Size extends Point2D{
     h:number;
 }
 
+
+declare interface IFrame extends Size{
+    ix:number;
+    iy:number;
+}
+
+declare interface IUVFrame extends IFrame{
+    ul:number;
+    ur:number;
+    vt:number;
+    vb:number;
+}
+
+
 declare const enum Align{
     TOP_LEFT,
     TOP_CENTER,
@@ -205,7 +219,7 @@ declare interface IMeshData{
     indexBuffer?:any;
 }
 
-declare interface ITextureData{
+declare interface ITextureSetting{
     key:string;
     url:string;
     mipmap:boolean;

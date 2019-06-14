@@ -457,7 +457,7 @@ export class Context3D {
 
 	getTextureData(url:string,mipmap?:boolean,mag?:number,mix?:number,repeat?:number,y?:boolean){
 		let{defauleMag} = this;
-		let data = {} as ITextureData;
+		let data = {} as ITextureSetting;
 		data.url = url;
 		data.mipmap = undefined != mipmap ? mipmap : false;
 		data.mag = undefined != mag ? mag : defauleMag;
@@ -470,7 +470,7 @@ export class Context3D {
 
 	textureObj:{[key:string]:Texture} = {};
 
-	createTexture(key:ITextureData,pixels?: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement | BitmapData): Texture {
+	createTexture(key:ITextureSetting,pixels?: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement | BitmapData): Texture {
 		let texture = recyclable(Texture);
 		texture.key = key.key ? key.key : (key.key = `${key.url}_${key.mipmap}_${key.mag}_${key.mix}_${key.repeat}`);
 		texture.data = key;
@@ -485,7 +485,7 @@ export class Context3D {
 		return texture;
 	}
 
-	createEmptyTexture(key:ITextureData,width: number, height: number): Texture {
+	createEmptyTexture(key:ITextureSetting,width: number, height: number): Texture {
 		let texture = recyclable(Texture);
 		texture.key = key.key ? key.key : (key.key = `${key.url}_${key.mipmap}_${key.mag}_${key.mix}_${key.repeat}`);
 		texture.data = key;
@@ -496,7 +496,7 @@ export class Context3D {
 	}
 
 
-	createRttTexture(key:ITextureData,width: number, height: number): RTTexture {
+	createRttTexture(key:ITextureSetting,width: number, height: number): RTTexture {
 		let texture = new RTTexture();
 		texture.key = key.key ? key.key : (key.key = `${key.url}_${key.mipmap}_${key.mag}_${key.mix}_${key.repeat}`);
 		texture.data = key;
@@ -506,7 +506,7 @@ export class Context3D {
 		return texture;
 	}
 
-	createCubeTexture(key:ITextureData): CubeTexture {
+	createCubeTexture(key:ITextureSetting): CubeTexture {
 		let texture = new CubeTexture();
 		texture.key = key.key ? key.key : (key.key = `${key.url}_${key.mipmap}_${key.mag}_${key.mix}_${key.repeat}`);
 		texture.data = key;

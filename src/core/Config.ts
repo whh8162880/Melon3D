@@ -23,6 +23,7 @@ export var TEMP_RECT:Size = {} as Size;
 
 
 export var max_vc = 60;
+
 export var c_white:string = `rgb(255,255,255)`;
 
 

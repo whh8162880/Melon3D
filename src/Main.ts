@@ -12,7 +12,6 @@ export class Main extends App{
         let config = wx.getSystemInfoSync();
 
 
-
         context3D.configureBackBuffer(config.screenWidth,config.screenHeight);
         let vertex = [
             -1,1,
