@@ -27,14 +27,14 @@ export var max_vc = 60;
 export var c_white:string = `rgb(255,255,255)`;
 
 
-export var softKeyboard:boolean = false;
+export var softKeyboard = false;
 
 
-export var ROOT_PERFIX:string;
+export var ROOT_PERFIX = "";
 
-export var RES_PERFIX:string;
+export var RES_PERFIX = "assets/";
 
-export var CONFIG_PERFIX:string;
+export var CONFIG_PERFIX = "assets/";
 
 export var FILE_ROOT:any;
 
