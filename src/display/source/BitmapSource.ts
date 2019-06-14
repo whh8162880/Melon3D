@@ -174,6 +174,7 @@ export function createBitmapSource(name: string, w: number, h: number, origin?: 
 
 export function loadBitmapSource(url: string,complete?:Function) {
     let source = bitmapSources[url];
+    
     if(!source) {
         bitmapSources[url] = source = new BitmapSource(url,false);
         source.load(url);
@@ -188,13 +189,16 @@ export function loadBitmapSource(url: string,complete?:Function) {
 
     if(complete){
         let completes = source.completeFuncs;
+
         if(!completes){
             source.completeFuncs = completes = [];
         }
+
         if(completes.indexOf(complete) == -1){
             completes.push(complete);
         }
     }
+    
     return source;
 }
 
