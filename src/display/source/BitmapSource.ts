@@ -39,6 +39,8 @@ export class BitmapSource extends MiniDispatcher {
     texture: Texture;
     textureData: ITextureSetting;
 
+    completeFuncs:Function[];
+
     constructor(name: string, autopack = false) {
         super();
         this.name = name;
@@ -73,6 +75,8 @@ export class BitmapSource extends MiniDispatcher {
         if (this.autopack) {
             this.maxRect = new MaxRectsBinPack(width, height);
         }
+
+        return this;
 
     }
 
@@ -148,12 +152,50 @@ export class BitmapSource extends MiniDispatcher {
 export var bitmapSources: { [key: string]: BitmapSource } = {};
 
 export function createBitmapSource(name: string, w: number, h: number, origin?: boolean) {
+    console.log(`createBitmapSource ${name} ${w} x ${h}`);
+    let source = bitmapSources[name];
+    if(source){
+        return source;
+    }
 
+    let bmd = new BitmapData(w,h,true);
+    source = new BitmapSource(name,true).create(bmd);
+
+    if(origin){
+        let vo = source.getEmptySourceVO("origin",1,1);
+        //"#FFFFFF"
+        bmd.fillRect(vo.x,vo.y,vo.w,vo.h,"#FFFFFF");
+        source.origin = [vo.ul,vo.vt];
+    }
+
+    return source;
 }
 
 
-export function loadBitmapSource(url: string) {
+export function loadBitmapSource(url: string,complete?:Function) {
+    let source = bitmapSources[url];
+    if(!source) {
+        bitmapSources[url] = source = new BitmapSource(url,false);
+        source.load(url);
+    }else if(source.status == LoadStates.WAIT){
+        source.load(url);
+    }
+    
+    if(complete && source.status == LoadStates.COMPLETE){
+        complete(source);
+        return source;
+    }
 
+    if(complete){
+        let completes = source.completeFuncs;
+        if(!completes){
+            source.completeFuncs = completes = [];
+        }
+        if(completes.indexOf(complete) == -1){
+            completes.push(complete);
+        }
+    }
+    return source;
 }
 
 
