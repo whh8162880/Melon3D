@@ -159,7 +159,7 @@ export class MiniDispatcher implements IEventDispatcherX, IRecyclable {
 				if (undefined != f) {
 					if (f.length == 2) {
 						f.call(vo.thisObj, event, event.data);
-					}else{
+					} else {
 						f.call(vo.thisObj, event);
 					}
 				}
@@ -213,10 +213,15 @@ export class MiniDispatcher implements IEventDispatcherX, IRecyclable {
 	onRecycle(): void {
 		this.removeEventListeners();
 	}
-
-
-	addEventListener = this.on;
-	removeEventListener = this.off;
-
-	hasEventListener = this.has;
 }
+
+export interface MiniDispatcher {
+	addEventListener(type: string | number, listener: Function, thisObject: any, priority?: number, ones?: boolean)
+	removeEventListener(type: string | number, listener: Function, thisObject: any)
+	hasEventListener(type: string | number): boolean
+}
+
+const pt = MiniDispatcher.prototype;
+pt.addEventListener = pt.on;
+pt.removeEventListener = pt.on;
+pt.hasEventListener = pt.has;
